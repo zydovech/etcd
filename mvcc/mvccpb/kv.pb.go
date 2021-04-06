@@ -70,7 +70,7 @@ type KeyValue struct {
 	Version int64 `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
 	// value is the value held by the key, in bytes.
 	Value []byte `protobuf:"bytes,5,opt,name=value,proto3" json:"value,omitempty"`
-	// lease is the ID of the lease that attached to key.
+	// lease is the NodeId of the lease that attached to key.
 	// When the attached lease expires, the key will be deleted.
 	// If lease is 0, then no lease is attached to the key.
 	Lease int64 `protobuf:"varint,6,opt,name=lease,proto3" json:"lease,omitempty"`

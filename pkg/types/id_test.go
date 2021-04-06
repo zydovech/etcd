@@ -38,7 +38,7 @@ func TestIDString(t *testing.T) {
 	for i, tt := range tests {
 		got := tt.input.String()
 		if tt.want != got {
-			t.Errorf("#%d: ID.String failure: want=%v, got=%v", i, tt.want, got)
+			t.Errorf("#%d: NodeId.String failure: want=%v, got=%v", i, tt.want, got)
 		}
 	}
 }

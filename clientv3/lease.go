@@ -78,7 +78,7 @@ const (
 	// defaultTTL is the assumed lease TTL used for the first keepalive
 	// deadline before the actual TTL is known to the client.
 	defaultTTL = 5 * time.Second
-	// NoLease is a lease ID for the absence of a lease.
+	// NoLease is a lease NodeId for the absence of a lease.
 	NoLease LeaseID = 0
 
 	// retryConnWait is how long to wait before retrying request due to an error
@@ -112,7 +112,7 @@ type Lease interface {
 	// Revoke revokes the given lease.
 	Revoke(ctx context.Context, id LeaseID) (*LeaseRevokeResponse, error)
 
-	// TimeToLive retrieves the lease information of the given lease ID.
+	// TimeToLive retrieves the lease information of the given lease NodeId.
 	TimeToLive(ctx context.Context, id LeaseID, opts ...LeaseOption) (*LeaseTimeToLiveResponse, error)
 
 	// Leases retrieves all leases.

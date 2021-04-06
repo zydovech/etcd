@@ -16,7 +16,7 @@ package types
 
 import "strconv"
 
-// ID represents a generic identifier which is canonically
+// NodeId represents a generic identifier which is canonically
 // stored as a uint64 but is typically represented as a
 // base-16 string for input/output
 type ID uint64
@@ -25,7 +25,7 @@ func (i ID) String() string {
 	return strconv.FormatUint(uint64(i), 16)
 }
 
-// IDFromString attempts to create an ID from a base-16 string.
+// IDFromString attempts to create an NodeId from a base-16 string.
 func IDFromString(s string) (ID, error) {
 	i, err := strconv.ParseUint(s, 16, 64)
 	return ID(i), err

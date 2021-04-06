@@ -184,7 +184,7 @@ func TestServeMembersGet(t *testing.T) {
 		if rw.Body.String() != tt.wbody {
 			t.Errorf("#%d: body = %s, want %s", i, rw.Body.String(), tt.wbody)
 		}
-		gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+		gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 		wcid := cluster.ID().String()
 		if gcid != wcid {
 			t.Errorf("#%d: cid = %s, want %s", i, gcid, wcid)

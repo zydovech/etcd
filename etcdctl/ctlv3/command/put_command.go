@@ -56,7 +56,7 @@ will store the content of the file to <key>.
 `,
 		Run: putCommandFunc,
 	}
-	cmd.Flags().StringVar(&leaseStr, "lease", "0", "lease ID (in hexadecimal) to attach to the key")
+	cmd.Flags().StringVar(&leaseStr, "lease", "0", "lease NodeId (in hexadecimal) to attach to the key")
 	cmd.Flags().BoolVar(&putPrevKV, "prev-kv", false, "return the previous key-value pair before modification")
 	cmd.Flags().BoolVar(&putIgnoreVal, "ignore-value", false, "updates the key using its current value")
 	cmd.Flags().BoolVar(&putIgnoreLease, "ignore-lease", false, "updates the key using its current lease")
@@ -97,7 +97,7 @@ func getPutOp(args []string) (string, string, []clientv3.OpOption) {
 
 	id, err := strconv.ParseInt(leaseStr, 16, 64)
 	if err != nil {
-		ExitWithError(ExitBadArgs, fmt.Errorf("bad lease ID (%v), expecting ID in Hex", err))
+		ExitWithError(ExitBadArgs, fmt.Errorf("bad lease NodeId (%v), expecting NodeId in Hex", err))
 	}
 
 	opts := []clientv3.OpOption{}

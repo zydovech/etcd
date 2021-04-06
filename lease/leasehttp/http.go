@@ -189,7 +189,7 @@ func RenewHTTP(ctx context.Context, id lease.LeaseID, url string, rt http.RoundT
 	return lresp.TTL, nil
 }
 
-// TimeToLiveHTTP retrieves lease information of the given lease ID.
+// TimeToLiveHTTP retrieves lease information of the given lease NodeId.
 func TimeToLiveHTTP(ctx context.Context, id lease.LeaseID, keys bool, url string, rt http.RoundTripper) (*leasepb.LeaseInternalResponse, error) {
 	// will post lreq protobuf to leader
 	lreq, err := (&leasepb.LeaseInternalRequest{

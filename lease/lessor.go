@@ -89,8 +89,8 @@ type Lessor interface {
 
 	// Grant grants a lease that expires at least after TTL seconds.
 	Grant(id LeaseID, ttl int64) (*Lease, error)
-	// Revoke revokes a lease with given ID. The item attached to the
-	// given lease will be removed. If the ID does not exist, an error
+	// Revoke revokes a lease with given NodeId. The item attached to the
+	// given lease will be removed. If the NodeId does not exist, an error
 	// will be returned.
 	Revoke(id LeaseID) error
 
@@ -118,7 +118,7 @@ type Lessor interface {
 	// Demote demotes the lessor from being the primary lessor.
 	Demote()
 
-	// Renew renews a lease with given ID. It returns the renewed TTL. If the ID does not exist,
+	// Renew renews a lease with given NodeId. It returns the renewed TTL. If the NodeId does not exist,
 	// an error will be returned.
 	Renew(id LeaseID) (int64, error)
 
@@ -161,7 +161,7 @@ type lessor struct {
 	// elections and restarts, the lessor will checkpoint the lease by the Checkpointer.
 	cp Checkpointer
 
-	// backend to persist leases. We only persist lease ID and expiry for now.
+	// backend to persist leases. We only persist lease NodeId and expiry for now.
 	// The leased items can be recovered by iterating all the keys in kv.
 	b backend.Backend
 
@@ -513,7 +513,7 @@ func (le *lessor) Demote() {
 	}
 }
 
-// Attach attaches items to the lease with given ID. When the lease
+// Attach attaches items to the lease with given NodeId. When the lease
 // expires, the attached items will be automatically removed.
 // If the given lease does not exist, an error will be returned.
 func (le *lessor) Attach(id LeaseID, items []LeaseItem) error {
@@ -541,7 +541,7 @@ func (le *lessor) GetLease(item LeaseItem) LeaseID {
 	return id
 }
 
-// Detach detaches items from the lease with given ID.
+// Detach detaches items from the lease with given NodeId.
 // If the given lease does not exist, an error will be returned.
 func (le *lessor) Detach(id LeaseID, items []LeaseItem) error {
 	le.mu.Lock()

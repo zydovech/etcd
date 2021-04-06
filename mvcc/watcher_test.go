@@ -88,7 +88,7 @@ func TestWatcherRequestsCustomID(t *testing.T) {
 	w := s.NewWatchStream()
 	defer w.Close()
 
-	// - Request specifically ID #1
+	// - Request specifically NodeId #1
 	// - Try to duplicate it, get an error
 	// - Make sure the auto-assignment skips over things we manually assigned
 
@@ -110,7 +110,7 @@ func TestWatcherRequestsCustomID(t *testing.T) {
 				t.Errorf("expected get error %q in test case %q, got %q", tcase.expectedErr, i, err)
 			}
 		} else if tcase.expectedID != id {
-			t.Errorf("expected to create ID %d, got %d in test case %d", tcase.expectedID, id, i)
+			t.Errorf("expected to create NodeId %d, got %d in test case %d", tcase.expectedID, id, i)
 		}
 	}
 }

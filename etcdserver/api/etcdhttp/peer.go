@@ -98,7 +98,7 @@ func (h *peerMembersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if !allowMethod(w, r, "GET") {
 		return
 	}
-	w.Header().Set("X-Etcd-Cluster-ID", h.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.cluster.ID().String())
 
 	if r.URL.Path != peerMembersPath {
 		http.Error(w, "bad path", http.StatusBadRequest)
@@ -119,7 +119,7 @@ func (h *peerMemberPromoteHandler) ServeHTTP(w http.ResponseWriter, r *http.Requ
 	if !allowMethod(w, r, "POST") {
 		return
 	}
-	w.Header().Set("X-Etcd-Cluster-ID", h.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.cluster.ID().String())
 
 	if !strings.HasPrefix(r.URL.Path, peerMemberPromotePrefix) {
 		http.Error(w, "bad path", http.StatusBadRequest)

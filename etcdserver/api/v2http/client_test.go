@@ -700,7 +700,7 @@ func TestServeMembers(t *testing.T) {
 		if gct := rw.Header().Get("Content-Type"); gct != tt.wct {
 			t.Errorf("#%d: content-type = %s, want %s", i, gct, tt.wct)
 		}
-		gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+		gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 		wcid := cluster.ID().String()
 		if gcid != wcid {
 			t.Errorf("#%d: cid = %s, want %s", i, gcid, wcid)
@@ -752,7 +752,7 @@ func TestServeLeader(t *testing.T) {
 		if gct := rw.Header().Get("Content-Type"); gct != tt.wct {
 			t.Errorf("#%d: content-type = %s, want %s", i, gct, tt.wct)
 		}
-		gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+		gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 		wcid := cluster.ID().String()
 		if gcid != wcid {
 			t.Errorf("#%d: cid = %s, want %s", i, gcid, wcid)
@@ -791,7 +791,7 @@ func TestServeMembersCreate(t *testing.T) {
 	if gct := rw.Header().Get("Content-Type"); gct != wct {
 		t.Errorf("content-type = %s, want %s", gct, wct)
 	}
-	gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+	gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 	wcid := h.cluster.ID().String()
 	if gcid != wcid {
 		t.Errorf("cid = %s, want %s", gcid, wcid)
@@ -835,7 +835,7 @@ func TestServeMembersDelete(t *testing.T) {
 	if rw.Code != wcode {
 		t.Errorf("code=%d, want %d", rw.Code, wcode)
 	}
-	gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+	gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 	wcid := h.cluster.ID().String()
 	if gcid != wcid {
 		t.Errorf("cid = %s, want %s", gcid, wcid)
@@ -874,7 +874,7 @@ func TestServeMembersUpdate(t *testing.T) {
 		t.Errorf("code=%d, want %d", rw.Code, wcode)
 	}
 
-	gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+	gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 	wcid := h.cluster.ID().String()
 	if gcid != wcid {
 		t.Errorf("cid = %s, want %s", gcid, wcid)
@@ -1009,7 +1009,7 @@ func TestServeMembersFail(t *testing.T) {
 			http.StatusInternalServerError,
 		},
 		{
-			// etcdserver.RemoveMember error with previously removed ID
+			// etcdserver.RemoveMember error with previously removed NodeId
 			&http.Request{
 				URL:    testutil.MustNewURL(t, path.Join(membersPrefix, "0")),
 				Method: "DELETE",
@@ -1021,7 +1021,7 @@ func TestServeMembersFail(t *testing.T) {
 			http.StatusGone,
 		},
 		{
-			// etcdserver.RemoveMember error with nonexistent ID
+			// etcdserver.RemoveMember error with nonexistent NodeId
 			&http.Request{
 				URL:    testutil.MustNewURL(t, path.Join(membersPrefix, "0")),
 				Method: "DELETE",
@@ -1033,7 +1033,7 @@ func TestServeMembersFail(t *testing.T) {
 			http.StatusNotFound,
 		},
 		{
-			// etcdserver.RemoveMember error with badly formed ID
+			// etcdserver.RemoveMember error with badly formed NodeId
 			&http.Request{
 				URL:    testutil.MustNewURL(t, path.Join(membersPrefix, "bad_id")),
 				Method: "DELETE",
@@ -1043,7 +1043,7 @@ func TestServeMembersFail(t *testing.T) {
 			http.StatusNotFound,
 		},
 		{
-			// etcdserver.RemoveMember with no ID
+			// etcdserver.RemoveMember with no NodeId
 			&http.Request{
 				URL:    testutil.MustNewURL(t, membersPrefix),
 				Method: "DELETE",
@@ -1131,7 +1131,7 @@ func TestServeMembersFail(t *testing.T) {
 			http.StatusNotFound,
 		},
 		{
-			// etcdserver.UpdateMember error with badly formed ID
+			// etcdserver.UpdateMember error with badly formed NodeId
 			&http.Request{
 				URL:    testutil.MustNewURL(t, path.Join(membersPrefix, "bad_id")),
 				Method: "PUT",
@@ -1141,7 +1141,7 @@ func TestServeMembersFail(t *testing.T) {
 			http.StatusNotFound,
 		},
 		{
-			// etcdserver.UpdateMember with no ID
+			// etcdserver.UpdateMember with no NodeId
 			&http.Request{
 				URL:    testutil.MustNewURL(t, membersPrefix),
 				Method: "PUT",
@@ -1164,7 +1164,7 @@ func TestServeMembersFail(t *testing.T) {
 			t.Errorf("#%d: code=%d, want %d", i, rw.Code, tt.wcode)
 		}
 		if rw.Code != http.StatusMethodNotAllowed {
-			gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+			gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 			wcid := h.cluster.ID().String()
 			if gcid != wcid {
 				t.Errorf("#%d: cid = %s, want %s", i, gcid, wcid)
@@ -1515,7 +1515,7 @@ func TestBadServeKeys(t *testing.T) {
 			t.Errorf("#%d: got code=%d, want %d", i, rw.Code, tt.wcode)
 		}
 		if rw.Code != http.StatusMethodNotAllowed {
-			gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+			gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 			wcid := h.cluster.ID().String()
 			if gcid != wcid {
 				t.Errorf("#%d: cid = %s, want %s", i, gcid, wcid)
@@ -1638,7 +1638,7 @@ func TestServeKeysEvent(t *testing.T) {
 		if rw.Code != tt.wcode {
 			t.Errorf("got code=%d, want %d", rw.Code, tt.wcode)
 		}
-		gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+		gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 		wcid := h.cluster.ID().String()
 		if gcid != wcid {
 			t.Errorf("cid = %s, want %s", gcid, wcid)
@@ -1689,7 +1689,7 @@ func TestServeKeysWatch(t *testing.T) {
 	if rw.Code != wcode {
 		t.Errorf("got code=%d, want %d", rw.Code, wcode)
 	}
-	gcid := rw.Header().Get("X-Etcd-Cluster-ID")
+	gcid := rw.Header().Get("X-Etcd-Cluster-NodeId")
 	wcid := h.cluster.ID().String()
 	if gcid != wcid {
 		t.Errorf("cid = %s, want %s", gcid, wcid)

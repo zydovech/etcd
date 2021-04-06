@@ -442,7 +442,7 @@ func (w *watcher) closeStream(wgs *watchGrpcStream) {
 }
 
 func (w *watchGrpcStream) addSubstream(resp *pb.WatchResponse, ws *watcherStream) {
-	// check watch ID for backward compatibility (<= v3.3)
+	// check watch NodeId for backward compatibility (<= v3.3)
 	if resp.WatchId == -1 || (resp.Canceled && resp.CancelReason != "") {
 		w.closeErr = v3rpc.Error(errors.New(resp.CancelReason))
 		// failed; no channel
@@ -518,7 +518,7 @@ func (w *watchGrpcStream) run() {
 		w.owner.closeStream(w)
 	}()
 
-	// start a stream with the etcd grpc server
+	// start a stream with the etcd grpc server 这里是创建连接
 	if wc, closeErr = w.newWatchClient(); closeErr != nil {
 		return
 	}
@@ -533,7 +533,7 @@ func (w *watchGrpcStream) run() {
 			switch wreq := req.(type) {
 			case *watchRequest:
 				outc := make(chan WatchResponse, 1)
-				// TODO: pass custom watch ID?
+				// TODO: pass custom watch NodeId?
 				ws := &watcherStream{
 					initReq: *wreq,
 					id:      -1,
@@ -713,7 +713,7 @@ func (w *watchGrpcStream) dispatchEvent(pbresp *pb.WatchResponse) bool {
 	for i, ev := range pbresp.Events {
 		events[i] = (*Event)(ev)
 	}
-	// TODO: return watch ID?
+	// TODO: return watch NodeId?
 	wr := &WatchResponse{
 		Header:          *pbresp.Header,
 		Events:          events,
@@ -723,7 +723,7 @@ func (w *watchGrpcStream) dispatchEvent(pbresp *pb.WatchResponse) bool {
 		cancelReason:    pbresp.CancelReason,
 	}
 
-	// watch IDs are zero indexed, so request notify watch responses are assigned a watch ID of -1 to
+	// watch IDs are zero indexed, so request notify watch responses are assigned a watch NodeId of -1 to
 	// indicate they should be broadcast.
 	if wr.IsProgressNotify() && pbresp.WatchId == -1 {
 		return w.broadcastResponse(wr)

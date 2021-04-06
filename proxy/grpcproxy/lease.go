@@ -32,7 +32,7 @@ import (
 )
 
 type leaseProxy struct {
-	// leaseClient handles req from LeaseGrant() that requires a lease ID.
+	// leaseClient handles req from LeaseGrant() that requires a lease NodeId.
 	leaseClient pb.LeaseClient
 
 	lessor clientv3.Lease

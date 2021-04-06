@@ -134,7 +134,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Request struct {
-	ID               uint64 `protobuf:"varint,1,opt,name=ID" json:"ID"`
+	ID               uint64 `protobuf:"varint,1,opt,name=NodeId" json:"NodeId"`
 	Method           string `protobuf:"bytes,2,opt,name=Method" json:"Method"`
 	Path             string `protobuf:"bytes,3,opt,name=Path" json:"Path"`
 	Val              string `protobuf:"bytes,4,opt,name=Val" json:"Val"`
@@ -423,7 +423,7 @@ func (m *Request) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {

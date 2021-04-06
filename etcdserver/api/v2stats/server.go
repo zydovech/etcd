@@ -47,8 +47,8 @@ func NewServerStats(name, id string) *ServerStats {
 
 type serverStats struct {
 	Name string `json:"name"`
-	// ID is the raft ID of the node.
-	// TODO(jonboulle): use ID instead of name?
+	// NodeId is the raft NodeId of the node.
+	// TODO(jonboulle): use NodeId instead of name?
 	ID        string         `json:"id"`
 	State     raft.StateType `json:"state"`
 	StartTime time.Time      `json:"startTime"`

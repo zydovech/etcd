@@ -47,7 +47,7 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type LockRequest struct {
 	// name is the identifier for the distributed shared lock to be acquired.
 	Name []byte `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// lease is the ID of the lease that will be attached to ownership of the
+	// lease is the NodeId of the lease that will be attached to ownership of the
 	// lock. If the lease expires or is revoked and currently holds the lock,
 	// the lock is automatically released. Calls to Lock with the same lease will
 	// be treated as a single acquisition; locking twice with the same lease is a

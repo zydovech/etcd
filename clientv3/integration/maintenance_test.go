@@ -227,7 +227,7 @@ func TestMaintenanceStatus(t *testing.T) {
 			continue
 		}
 		if prevID == resp.Header.MemberId {
-			t.Errorf("#%d: status returned duplicate member ID with %016x", i, prevID)
+			t.Errorf("#%d: status returned duplicate member NodeId with %016x", i, prevID)
 		}
 		if leaderFound && resp.Header.MemberId == resp.Leader {
 			t.Errorf("#%d: leader already found, but found another %016x", i, resp.Header.MemberId)

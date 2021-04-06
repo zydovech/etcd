@@ -156,7 +156,7 @@ func testV3CurlLeaseKeepAlive(cx ctlCtx) {
 }
 
 func gwLeaseIDExpected(leaseID int64) string {
-	return fmt.Sprintf(`"ID":"%d"`, leaseID)
+	return fmt.Sprintf(`"NodeId":"%d"`, leaseID)
 }
 
 func gwLeaseTTLWithKeys(cx ctlCtx, leaseID int64) string {

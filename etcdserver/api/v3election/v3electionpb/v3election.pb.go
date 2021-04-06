@@ -54,7 +54,7 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type CampaignRequest struct {
 	// name is the election's identifier for the campaign.
 	Name []byte `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// lease is the ID of the lease attached to leadership of the election. If the
+	// lease is the NodeId of the lease attached to leadership of the election. If the
 	// lease expires or is revoked before resigning leadership, then the
 	// leadership is transferred to the next campaigner, if any.
 	Lease int64 `protobuf:"varint,2,opt,name=lease,proto3" json:"lease,omitempty"`
@@ -124,7 +124,7 @@ type LeaderKey struct {
 	// of an election during transactions by testing the key's creation revision
 	// matches rev.
 	Rev int64 `protobuf:"varint,3,opt,name=rev,proto3" json:"rev,omitempty"`
-	// lease is the lease ID of the election leader.
+	// lease is the lease NodeId of the election leader.
 	Lease int64 `protobuf:"varint,4,opt,name=lease,proto3" json:"lease,omitempty"`
 }
 

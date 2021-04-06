@@ -75,7 +75,7 @@ type Progress struct {
 	// received entry.
 	Inflights *Inflights
 
-	// IsLearner is true if this progress is tracked for a learner.
+	// Join is true if this progress is tracked for a learner.
 	IsLearner bool
 }
 
@@ -168,12 +168,12 @@ func (pr *Progress) OptimisticUpdate(n uint64) { pr.Next = n + 1 }
 // without changing the Progress.
 //
 // If the rejection is genuine, Next is lowered sensibly, and the Progress is
-// cleared for sending log entries.
+// cleared for sending log entries.  这里的rejected 是follower 拒绝的index，就是next-1 ...last是follower最新的日志index
 func (pr *Progress) MaybeDecrTo(rejected, last uint64) bool {
 	if pr.State == StateReplicate {
 		// The rejection must be stale if the progress has matched and "rejected"
 		// is smaller than "match".
-		if rejected <= pr.Match {
+		if rejected <= pr.Match { //不可能比match 小
 			return false
 		}
 		// Directly decrease next to match + 1.

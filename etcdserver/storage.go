@@ -79,7 +79,7 @@ func (st *storage) Release(snap raftpb.Snapshot) error {
 	return st.Snapshotter.ReleaseSnapDBs(snap)
 }
 
-// readWAL reads the WAL at the given snap and returns the wal, its latest HardState and cluster ID, and all entries that appear
+// readWAL reads the WAL at the given snap and returns the wal, its latest HardState and cluster NodeId, and all entries that appear
 // after the position of the given snap in the WAL.
 // The snap must have been previously saved to the WAL, or this call will panic.
 func readWAL(lg *zap.Logger, waldir string, snap walpb.Snapshot, unsafeNoFsync bool) (w *wal.WAL, id, cid types.ID, st raftpb.HardState, ents []raftpb.Entry) {

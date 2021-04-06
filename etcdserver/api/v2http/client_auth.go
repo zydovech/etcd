@@ -244,7 +244,7 @@ func (sh *authHandler) baseRoles(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("X-Etcd-Cluster-ID", sh.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", sh.cluster.ID().String())
 	w.Header().Set("Content-Type", "application/json")
 
 	roles, err := sh.sec.AllRoles()
@@ -315,7 +315,7 @@ func (sh *authHandler) forRole(w http.ResponseWriter, r *http.Request, role stri
 		writeNoAuth(sh.lg, w, r)
 		return
 	}
-	w.Header().Set("X-Etcd-Cluster-ID", sh.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", sh.cluster.ID().String())
 	w.Header().Set("Content-Type", "application/json")
 
 	switch r.Method {
@@ -417,7 +417,7 @@ func (sh *authHandler) baseUsers(w http.ResponseWriter, r *http.Request) {
 		writeNoAuth(sh.lg, w, r)
 		return
 	}
-	w.Header().Set("X-Etcd-Cluster-ID", sh.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", sh.cluster.ID().String())
 	w.Header().Set("Content-Type", "application/json")
 
 	users, err := sh.sec.AllUsers()
@@ -497,7 +497,7 @@ func (sh *authHandler) forUser(w http.ResponseWriter, r *http.Request, user stri
 		writeNoAuth(sh.lg, w, r)
 		return
 	}
-	w.Header().Set("X-Etcd-Cluster-ID", sh.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", sh.cluster.ID().String())
 	w.Header().Set("Content-Type", "application/json")
 
 	switch r.Method {
@@ -628,7 +628,7 @@ func (sh *authHandler) enableDisable(w http.ResponseWriter, r *http.Request) {
 		writeNoAuth(sh.lg, w, r)
 		return
 	}
-	w.Header().Set("X-Etcd-Cluster-ID", sh.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", sh.cluster.ID().String())
 	w.Header().Set("Content-Type", "application/json")
 	isEnabled := sh.sec.AuthEnabled()
 	switch r.Method {

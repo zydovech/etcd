@@ -31,12 +31,12 @@ func TestNewGenerator(t *testing.T) {
 func TestNewGeneratorUnique(t *testing.T) {
 	g := NewGenerator(0, time.Time{})
 	id := g.Next()
-	// different server generates different ID
+	// different server generates different NodeId
 	g1 := NewGenerator(1, time.Time{})
 	if gid := g1.Next(); id == gid {
-		t.Errorf("generate the same id %x using different server ID", id)
+		t.Errorf("generate the same id %x using different server NodeId", id)
 	}
-	// restarted server generates different ID
+	// restarted server generates different NodeId
 	g2 := NewGenerator(0, time.Now())
 	if gid := g2.Next(); id == gid {
 		t.Errorf("generate the same id %x after restart", id)

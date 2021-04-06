@@ -40,13 +40,13 @@ func TestLeaseQueue(t *testing.T) {
 
 	// first element is expired.
 	if le.leaseExpiredNotifier.Poll().id != LeaseID(1) {
-		t.Fatalf("first item expected lease ID %d, got %d", LeaseID(1), le.leaseExpiredNotifier.Poll().id)
+		t.Fatalf("first item expected lease NodeId %d, got %d", LeaseID(1), le.leaseExpiredNotifier.Poll().id)
 	}
 
 	existExpiredEvent := func() {
 		l, ok, more := le.expireExists()
 		if l.ID != 1 {
-			t.Fatalf("first item expected lease ID %d, got %d", 1, l.ID)
+			t.Fatalf("first item expected lease NodeId %d, got %d", 1, l.ID)
 		}
 		if !ok {
 			t.Fatal("expect expiry lease exists")
@@ -60,7 +60,7 @@ func TestLeaseQueue(t *testing.T) {
 		}
 
 		if le.leaseExpiredNotifier.Poll().id != LeaseID(1) {
-			t.Fatalf("first item expected lease ID %d, got %d", LeaseID(1), le.leaseExpiredNotifier.Poll().id)
+			t.Fatalf("first item expected lease NodeId %d, got %d", LeaseID(1), le.leaseExpiredNotifier.Poll().id)
 		}
 	}
 

@@ -103,18 +103,18 @@ func getClusterFromRemotePeers(lg *zap.Logger, urls []string, timeout time.Durat
 			}
 			continue
 		}
-		id, err := types.IDFromString(resp.Header.Get("X-Etcd-Cluster-ID"))
+		id, err := types.IDFromString(resp.Header.Get("X-Etcd-Cluster-NodeId"))
 		if err != nil {
 			if logerr {
 				if lg != nil {
 					lg.Warn(
-						"failed to parse cluster ID",
+						"failed to parse cluster NodeId",
 						zap.String("address", addr),
-						zap.String("header", resp.Header.Get("X-Etcd-Cluster-ID")),
+						zap.String("header", resp.Header.Get("X-Etcd-Cluster-NodeId")),
 						zap.Error(err),
 					)
 				} else {
-					plog.Warningf("could not parse the cluster ID from cluster res: %v", err)
+					plog.Warningf("could not parse the cluster NodeId from cluster res: %v", err)
 				}
 			}
 			continue
@@ -147,7 +147,7 @@ func getRemotePeerURLs(cl *membership.RaftCluster, local string) []string {
 }
 
 // getVersions returns the versions of the members in the given cluster.
-// The key of the returned map is the member's ID. The value of the returned map
+// The key of the returned map is the member's NodeId. The value of the returned map
 // is the semver versions string, including server and cluster.
 // If it fails to get the version of a member, the key will be nil.
 func getVersions(lg *zap.Logger, cl *membership.RaftCluster, local types.ID, rt http.RoundTripper) map[string]*version.Versions {

@@ -119,7 +119,7 @@ func (h *keysHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("X-Etcd-Cluster-ID", h.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.cluster.ID().String())
 
 	ctx, cancel := context.WithTimeout(context.Background(), h.timeout)
 	defer cancel()
@@ -195,7 +195,7 @@ func (h *membersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		writeNoAuth(h.lg, w, r)
 		return
 	}
-	w.Header().Set("X-Etcd-Cluster-ID", h.cluster.ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.cluster.ID().String())
 
 	ctx, cancel := context.WithTimeout(context.Background(), h.timeout)
 	defer cancel()

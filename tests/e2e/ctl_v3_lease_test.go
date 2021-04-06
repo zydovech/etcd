@@ -254,7 +254,7 @@ func ctlV3LeaseGrant(cx ctlCtx, ttl int) (string, error) {
 		return "", err
 	}
 
-	// parse 'line LEASE_ID granted with TTL(5s)' to get lease ID
+	// parse 'line LEASE_ID granted with TTL(5s)' to get lease NodeId
 	hs := strings.Split(line, " ")
 	if len(hs) < 2 {
 		return "", fmt.Errorf("lease grant failed with %q", line)

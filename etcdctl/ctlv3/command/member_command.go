@@ -92,7 +92,7 @@ func NewMemberListCommand() *cobra.Command {
 		Use:   "list",
 		Short: "Lists all members in the cluster",
 		Long: `When --write-out is set to simple, this command prints out comma-separated member lists for each endpoint.
-The items in the lists are ID, Status, Name, Peer Addrs, Client Addrs, Is Learner.
+The items in the lists are NodeId, Status, Name, Peer Addrs, Client Addrs, Is Learner.
 `,
 
 		Run: memberListCommandFunc,
@@ -178,12 +178,12 @@ func memberAddCommandFunc(cmd *cobra.Command, args []string) {
 // memberRemoveCommandFunc executes the "member remove" command.
 func memberRemoveCommandFunc(cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
-		ExitWithError(ExitBadArgs, fmt.Errorf("member ID is not provided"))
+		ExitWithError(ExitBadArgs, fmt.Errorf("member NodeId is not provided"))
 	}
 
 	id, err := strconv.ParseUint(args[0], 16, 64)
 	if err != nil {
-		ExitWithError(ExitBadArgs, fmt.Errorf("bad member ID arg (%v), expecting ID in Hex", err))
+		ExitWithError(ExitBadArgs, fmt.Errorf("bad member NodeId arg (%v), expecting NodeId in Hex", err))
 	}
 
 	ctx, cancel := commandCtx(cmd)
@@ -198,12 +198,12 @@ func memberRemoveCommandFunc(cmd *cobra.Command, args []string) {
 // memberUpdateCommandFunc executes the "member update" command.
 func memberUpdateCommandFunc(cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
-		ExitWithError(ExitBadArgs, fmt.Errorf("member ID is not provided"))
+		ExitWithError(ExitBadArgs, fmt.Errorf("member NodeId is not provided"))
 	}
 
 	id, err := strconv.ParseUint(args[0], 16, 64)
 	if err != nil {
-		ExitWithError(ExitBadArgs, fmt.Errorf("bad member ID arg (%v), expecting ID in Hex", err))
+		ExitWithError(ExitBadArgs, fmt.Errorf("bad member NodeId arg (%v), expecting NodeId in Hex", err))
 	}
 
 	if len(memberPeerURLs) == 0 {
@@ -237,12 +237,12 @@ func memberListCommandFunc(cmd *cobra.Command, args []string) {
 // memberPromoteCommandFunc executes the "member promote" command.
 func memberPromoteCommandFunc(cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
-		ExitWithError(ExitBadArgs, fmt.Errorf("member ID is not provided"))
+		ExitWithError(ExitBadArgs, fmt.Errorf("member NodeId is not provided"))
 	}
 
 	id, err := strconv.ParseUint(args[0], 16, 64)
 	if err != nil {
-		ExitWithError(ExitBadArgs, fmt.Errorf("bad member ID arg (%v), expecting ID in Hex", err))
+		ExitWithError(ExitBadArgs, fmt.Errorf("bad member NodeId arg (%v), expecting NodeId in Hex", err))
 	}
 
 	ctx, cancel := commandCtx(cmd)

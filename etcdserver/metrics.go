@@ -148,7 +148,7 @@ var (
 		Namespace: "etcd",
 		Subsystem: "server",
 		Name:      "id",
-		Help:      "Server or member ID in hexadecimal format. 1 for 'server_id' label with current ID.",
+		Help:      "Server or member NodeId in hexadecimal format. 1 for 'server_id' label with current NodeId.",
 	},
 		[]string{"server_id"})
 

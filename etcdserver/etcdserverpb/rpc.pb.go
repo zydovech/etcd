@@ -217,9 +217,9 @@ func (AlarmRequest_AlarmAction) EnumDescriptor() ([]byte, []int) {
 }
 
 type ResponseHeader struct {
-	// cluster_id is the ID of the cluster which sent the response.
+	// cluster_id is the NodeId of the cluster which sent the response.
 	ClusterId uint64 `protobuf:"varint,1,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// member_id is the ID of the member which sent the response.
+	// member_id is the NodeId of the member which sent the response.
 	MemberId uint64 `protobuf:"varint,2,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty"`
 	// revision is the key-value store revision when the request was applied.
 	// For watch progress responses, the header.revision indicates progress. All future events
@@ -453,7 +453,7 @@ type PutRequest struct {
 	Key []byte `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	// value is the value, in bytes, to associate with the key in the key-value store.
 	Value []byte `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	// lease is the lease ID to associate with the key in the key-value store. A lease
+	// lease is the lease NodeId to associate with the key in the key-value store. A lease
 	// value of 0 indicates no lease.
 	Lease int64 `protobuf:"varint,3,opt,name=lease,proto3" json:"lease,omitempty"`
 	// If prev_kv is set, etcd gets the previous key-value pair before changing it.
@@ -1659,7 +1659,7 @@ type WatchCreateRequest struct {
 	// If watch_id is provided and non-zero, it will be assigned to this watcher.
 	// Since creating a watcher in etcd is not a synchronous operation,
 	// this can be used ensure that ordering is correct when creating multiple
-	// watchers on the same stream. Creating a watcher with an ID already in
+	// watchers on the same stream. Creating a watcher with an NodeId already in
 	// use on the stream will cause an error to be returned.
 	WatchId int64 `protobuf:"varint,7,opt,name=watch_id,json=watchId,proto3" json:"watch_id,omitempty"`
 	// fragment enables splitting large revisions into multiple watch responses.
@@ -1756,7 +1756,7 @@ func (*WatchProgressRequest) Descriptor() ([]byte, []int) { return fileDescripto
 
 type WatchResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	// watch_id is the ID of the watcher that corresponds to the response.
+	// watch_id is the NodeId of the watcher that corresponds to the response.
 	WatchId int64 `protobuf:"varint,2,opt,name=watch_id,json=watchId,proto3" json:"watch_id,omitempty"`
 	// created is set to true if the response is for a create watch request.
 	// The client should record the watch_id and expect to receive events for
@@ -1846,8 +1846,8 @@ func (m *WatchResponse) GetEvents() []*mvccpb.Event {
 type LeaseGrantRequest struct {
 	// TTL is the advisory time-to-live in seconds. Expired lease will return -1.
 	TTL int64 `protobuf:"varint,1,opt,name=TTL,proto3" json:"TTL,omitempty"`
-	// ID is the requested ID for the lease. If ID is set to 0, the lessor chooses an ID.
-	ID int64 `protobuf:"varint,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the requested NodeId for the lease. If NodeId is set to 0, the lessor chooses an NodeId.
+	ID int64 `protobuf:"varint,2,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 }
 
 func (m *LeaseGrantRequest) Reset()                    { *m = LeaseGrantRequest{} }
@@ -1871,8 +1871,8 @@ func (m *LeaseGrantRequest) GetID() int64 {
 
 type LeaseGrantResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	// ID is the lease ID for the granted lease.
-	ID int64 `protobuf:"varint,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the lease NodeId for the granted lease.
+	ID int64 `protobuf:"varint,2,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// TTL is the server chosen lease time-to-live in seconds.
 	TTL   int64  `protobuf:"varint,3,opt,name=TTL,proto3" json:"TTL,omitempty"`
 	Error string `protobuf:"bytes,4,opt,name=error,proto3" json:"error,omitempty"`
@@ -1912,8 +1912,8 @@ func (m *LeaseGrantResponse) GetError() string {
 }
 
 type LeaseRevokeRequest struct {
-	// ID is the lease ID to revoke. When the ID is revoked, all associated keys will be deleted.
-	ID int64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the lease NodeId to revoke. When the NodeId is revoked, all associated keys will be deleted.
+	ID int64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 }
 
 func (m *LeaseRevokeRequest) Reset()                    { *m = LeaseRevokeRequest{} }
@@ -1945,8 +1945,8 @@ func (m *LeaseRevokeResponse) GetHeader() *ResponseHeader {
 }
 
 type LeaseCheckpoint struct {
-	// ID is the lease ID to checkpoint.
-	ID int64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the lease NodeId to checkpoint.
+	ID int64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// Remaining_TTL is the remaining time until expiry of the lease.
 	Remaining_TTL int64 `protobuf:"varint,2,opt,name=remaining_TTL,json=remainingTTL,proto3" json:"remaining_TTL,omitempty"`
 }
@@ -2003,8 +2003,8 @@ func (m *LeaseCheckpointResponse) GetHeader() *ResponseHeader {
 }
 
 type LeaseKeepAliveRequest struct {
-	// ID is the lease ID for the lease to keep alive.
-	ID int64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the lease NodeId for the lease to keep alive.
+	ID int64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 }
 
 func (m *LeaseKeepAliveRequest) Reset()                    { *m = LeaseKeepAliveRequest{} }
@@ -2021,8 +2021,8 @@ func (m *LeaseKeepAliveRequest) GetID() int64 {
 
 type LeaseKeepAliveResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	// ID is the lease ID from the keep alive request.
-	ID int64 `protobuf:"varint,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the lease NodeId from the keep alive request.
+	ID int64 `protobuf:"varint,2,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// TTL is the new time-to-live for the lease.
 	TTL int64 `protobuf:"varint,3,opt,name=TTL,proto3" json:"TTL,omitempty"`
 }
@@ -2054,8 +2054,8 @@ func (m *LeaseKeepAliveResponse) GetTTL() int64 {
 }
 
 type LeaseTimeToLiveRequest struct {
-	// ID is the lease ID for the lease.
-	ID int64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the lease NodeId for the lease.
+	ID int64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// keys is true to query all the keys attached to this lease.
 	Keys bool `protobuf:"varint,2,opt,name=keys,proto3" json:"keys,omitempty"`
 }
@@ -2081,8 +2081,8 @@ func (m *LeaseTimeToLiveRequest) GetKeys() bool {
 
 type LeaseTimeToLiveResponse struct {
 	Header *ResponseHeader `protobuf:"bytes,1,opt,name=header" json:"header,omitempty"`
-	// ID is the lease ID from the keep alive request.
-	ID int64 `protobuf:"varint,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the lease NodeId from the keep alive request.
+	ID int64 `protobuf:"varint,2,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// TTL is the remaining TTL in seconds for the lease; the lease will expire in under TTL+1 seconds.
 	TTL int64 `protobuf:"varint,3,opt,name=TTL,proto3" json:"TTL,omitempty"`
 	// GrantedTTL is the initial granted time in seconds upon lease creation/renewal.
@@ -2140,7 +2140,7 @@ func (*LeaseLeasesRequest) ProtoMessage()               {}
 func (*LeaseLeasesRequest) Descriptor() ([]byte, []int) { return fileDescriptorRpc, []int{36} }
 
 type LeaseStatus struct {
-	ID int64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	ID int64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 }
 
 func (m *LeaseStatus) Reset()                    { *m = LeaseStatus{} }
@@ -2180,8 +2180,8 @@ func (m *LeaseLeasesResponse) GetLeases() []*LeaseStatus {
 }
 
 type Member struct {
-	// ID is the member ID for this member.
-	ID uint64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the member NodeId for this member.
+	ID uint64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// name is the human-readable name of the member. If the member is not started, the name will be an empty string.
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	// peerURLs is the list of URLs the member exposes to the cluster for communication.
@@ -2293,8 +2293,8 @@ func (m *MemberAddResponse) GetMembers() []*Member {
 }
 
 type MemberRemoveRequest struct {
-	// ID is the member ID of the member to remove.
-	ID uint64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the member NodeId of the member to remove.
+	ID uint64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 }
 
 func (m *MemberRemoveRequest) Reset()                    { *m = MemberRemoveRequest{} }
@@ -2335,8 +2335,8 @@ func (m *MemberRemoveResponse) GetMembers() []*Member {
 }
 
 type MemberUpdateRequest struct {
-	// ID is the member ID of the member to update.
-	ID uint64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the member NodeId of the member to update.
+	ID uint64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// peerURLs is the new list of URLs the member will use to communicate with the cluster.
 	PeerURLs []string `protobuf:"bytes,2,rep,name=peerURLs" json:"peerURLs,omitempty"`
 }
@@ -2419,8 +2419,8 @@ func (m *MemberListResponse) GetMembers() []*Member {
 }
 
 type MemberPromoteRequest struct {
-	// ID is the member ID of the member to promote.
-	ID uint64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	// NodeId is the member NodeId of the member to promote.
+	ID uint64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 }
 
 func (m *MemberPromoteRequest) Reset()                    { *m = MemberPromoteRequest{} }
@@ -2485,7 +2485,7 @@ func (m *DefragmentResponse) GetHeader() *ResponseHeader {
 }
 
 type MoveLeaderRequest struct {
-	// targetID is the node ID for the new leader.
+	// targetID is the node NodeId for the new leader.
 	TargetID uint64 `protobuf:"varint,1,opt,name=targetID,proto3" json:"targetID,omitempty"`
 }
 
@@ -2522,7 +2522,7 @@ type AlarmRequest struct {
 	// may GET alarm statuses, ACTIVATE an alarm, or DEACTIVATE a
 	// raised alarm.
 	Action AlarmRequest_AlarmAction `protobuf:"varint,1,opt,name=action,proto3,enum=etcdserverpb.AlarmRequest_AlarmAction" json:"action,omitempty"`
-	// memberID is the ID of the member associated with the alarm. If memberID is 0, the
+	// memberID is the NodeId of the member associated with the alarm. If memberID is 0, the
 	// alarm request covers all members.
 	MemberID uint64 `protobuf:"varint,2,opt,name=memberID,proto3" json:"memberID,omitempty"`
 	// alarm is the type of alarm to consider for this request.
@@ -2556,7 +2556,7 @@ func (m *AlarmRequest) GetAlarm() AlarmType {
 }
 
 type AlarmMember struct {
-	// memberID is the ID of the member associated with the raised alarm.
+	// memberID is the NodeId of the member associated with the raised alarm.
 	MemberID uint64 `protobuf:"varint,1,opt,name=memberID,proto3" json:"memberID,omitempty"`
 	// alarm is the type of alarm which has been raised.
 	Alarm AlarmType `protobuf:"varint,2,opt,name=alarm,proto3,enum=etcdserverpb.AlarmType" json:"alarm,omitempty"`
@@ -2620,7 +2620,7 @@ type StatusResponse struct {
 	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
 	// dbSize is the size of the backend database physically allocated, in bytes, of the responding member.
 	DbSize int64 `protobuf:"varint,3,opt,name=dbSize,proto3" json:"dbSize,omitempty"`
-	// leader is the member ID which the responding member believes is the current leader.
+	// leader is the member NodeId which the responding member believes is the current leader.
 	Leader uint64 `protobuf:"varint,4,opt,name=leader,proto3" json:"leader,omitempty"`
 	// raftIndex is the current raft committed index of the responding member.
 	RaftIndex uint64 `protobuf:"varint,5,opt,name=raftIndex,proto3" json:"raftIndex,omitempty"`
@@ -13478,7 +13478,7 @@ func (m *LeaseGrantRequest) Unmarshal(dAtA []byte) error {
 			}
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -13580,7 +13580,7 @@ func (m *LeaseGrantResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -13697,7 +13697,7 @@ func (m *LeaseRevokeRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -13849,7 +13849,7 @@ func (m *LeaseCheckpoint) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -14101,7 +14101,7 @@ func (m *LeaseKeepAliveRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -14203,7 +14203,7 @@ func (m *LeaseKeepAliveResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -14291,7 +14291,7 @@ func (m *LeaseTimeToLiveRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -14413,7 +14413,7 @@ func (m *LeaseTimeToLiveResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -14599,7 +14599,7 @@ func (m *LeaseStatus) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -14782,7 +14782,7 @@ func (m *Member) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -14888,7 +14888,7 @@ func (m *Member) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IsLearner", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Join", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -14987,7 +14987,7 @@ func (m *MemberAddRequest) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IsLearner", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Join", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -15204,7 +15204,7 @@ func (m *MemberRemoveRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -15387,7 +15387,7 @@ func (m *MemberUpdateRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -15763,7 +15763,7 @@ func (m *MemberPromoteRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -16795,7 +16795,7 @@ func (m *StatusResponse) Unmarshal(dAtA []byte) error {
 			}
 		case 10:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IsLearner", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Join", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {

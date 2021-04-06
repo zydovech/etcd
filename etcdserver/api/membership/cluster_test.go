@@ -438,7 +438,7 @@ func TestClusterGenID(t *testing.T) {
 
 	cs.genID()
 	if cs.ID() == 0 {
-		t.Fatalf("cluster.ID = %v, want not 0", cs.ID())
+		t.Fatalf("cluster.NodeId = %v, want not 0", cs.ID())
 	}
 	previd := cs.ID()
 
@@ -446,7 +446,7 @@ func TestClusterGenID(t *testing.T) {
 	cs.AddMember(newTestMember(3, nil, "", nil))
 	cs.genID()
 	if cs.ID() == previd {
-		t.Fatalf("cluster.ID = %v, want not %v", cs.ID(), previd)
+		t.Fatalf("cluster.NodeId = %v, want not %v", cs.ID(), previd)
 	}
 }
 

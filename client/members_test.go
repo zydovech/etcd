@@ -163,7 +163,7 @@ func TestMemberUnmarshal(t *testing.T) {
 		wantMember Member
 		wantError  bool
 	}{
-		// no URLs, just check ID & Name
+		// no URLs, just check NodeId & Name
 		{
 			body:       []byte(`{"id": "c", "name": "dungarees"}`),
 			wantMember: Member{ID: "c", Name: "dungarees", PeerURLs: nil, ClientURLs: nil},

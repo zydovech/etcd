@@ -108,9 +108,9 @@ type Transport struct {
 
 	TLSInfo transport.TLSInfo // TLS information used when creating connection
 
-	ID          types.ID   // local member ID
+	ID          types.ID   // local member NodeId
 	URLs        types.URLs // local peer URLs
-	ClusterID   types.ID   // raft cluster ID for request validation
+	ClusterID   types.ID   // raft cluster NodeId for request validation
 	Raft        Raft       // raft state machine, to which the Transport forwards received messages and reports status
 	Snapshotter *snap.Snapshotter
 	ServerStats *stats.ServerStats // used to record general transportation statistics

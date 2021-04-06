@@ -325,7 +325,7 @@ func (op *Op) applyOpts(opts []OpOption) {
 // OpOption configures Operations like Get, Put, Delete.
 type OpOption func(*Op)
 
-// WithLease attaches a lease ID to a key in 'Put' request.
+// WithLease attaches a lease NodeId to a key in 'Put' request.
 func WithLease(leaseID LeaseID) OpOption {
 	return func(op *Op) { op.leaseID = leaseID }
 }
@@ -542,7 +542,7 @@ func (op *LeaseOp) applyOpts(opts []LeaseOption) {
 	}
 }
 
-// WithAttachedKeys makes TimeToLive list the keys attached to the given lease ID.
+// WithAttachedKeys makes TimeToLive list the keys attached to the given lease NodeId.
 func WithAttachedKeys() LeaseOption {
 	return func(op *LeaseOp) { op.attachedKeys = true }
 }

@@ -24,11 +24,11 @@ import (
 // Wait is an interface that provides the ability to wait and trigger events that
 // are associated with IDs.
 type Wait interface {
-	// Register waits returns a chan that waits on the given ID.
+	// Register waits returns a chan that waits on the given NodeId.
 	// The chan will be triggered when Trigger is called with
-	// the same ID.
+	// the same NodeId.
 	Register(id uint64) <-chan interface{}
-	// Trigger triggers the waiting chans with the given ID.
+	// Trigger triggers the waiting chans with the given NodeId.
 	Trigger(id uint64, x interface{})
 	IsRegistered(id uint64) bool
 }

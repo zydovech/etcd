@@ -77,7 +77,7 @@ func NewClusterFromURLsMap(lg *zap.Logger, token string, urlsmap types.URLsMap) 
 	for name, urls := range urlsmap {
 		m := NewMember(name, urls, token, nil)
 		if _, ok := c.members[m.ID]; ok {
-			return nil, fmt.Errorf("member exists with identical ID %v", m)
+			return nil, fmt.Errorf("member exists with identical NodeId %v", m)
 		}
 		if uint64(m.ID) == raft.None {
 			return nil, fmt.Errorf("cannot use %x as member id", raft.None)
@@ -480,7 +480,7 @@ func (c *RaftCluster) UpdateAttributes(id types.ID, attr Attributes) {
 	}
 }
 
-// PromoteMember marks the member's IsLearner RaftAttributes to false.
+// PromoteMember marks the member's Join RaftAttributes to false.
 func (c *RaftCluster) PromoteMember(id types.ID) {
 	c.Lock()
 	defer c.Unlock()
@@ -806,12 +806,12 @@ func (c *RaftCluster) IsLocalMemberLearner() bool {
 	if !ok {
 		if c.lg != nil {
 			c.lg.Panic(
-				"failed to find local ID in cluster members",
+				"failed to find local NodeId in cluster members",
 				zap.String("cluster-id", c.cid.String()),
 				zap.String("local-member-id", c.localID.String()),
 			)
 		} else {
-			plog.Panicf("failed to find local ID %s in cluster %s", c.localID.String(), c.cid.String())
+			plog.Panicf("failed to find local NodeId %s in cluster %s", c.localID.String(), c.cid.String())
 		}
 	}
 	return localMember.IsLearner
@@ -825,7 +825,7 @@ func (c *RaftCluster) IsMemberExist(id types.ID) bool {
 	return ok
 }
 
-// VotingMemberIDs returns the ID of voting members in cluster.
+// VotingMemberIDs returns the NodeId of voting members in cluster.
 func (c *RaftCluster) VotingMemberIDs() []types.ID {
 	c.Lock()
 	defer c.Unlock()

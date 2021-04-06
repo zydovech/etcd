@@ -35,7 +35,7 @@ type RaftAttributes struct {
 	// PeerURLs is the list of peers in the raft cluster.
 	// TODO(philips): ensure these are URLs
 	PeerURLs []string `json:"peerURLs"`
-	// IsLearner indicates if the member is raft learner.
+	// Join indicates if the member is raft learner.
 	IsLearner bool `json:"isLearner,omitempty"`
 }
 
@@ -51,13 +51,13 @@ type Member struct {
 	Attributes
 }
 
-// NewMember creates a Member without an ID and generates one based on the
+// NewMember creates a Member without an NodeId and generates one based on the
 // cluster name, peer URLs, and time. This is used for bootstrapping/adding new member.
 func NewMember(name string, peerURLs types.URLs, clusterName string, now *time.Time) *Member {
 	return newMember(name, peerURLs, clusterName, now, false)
 }
 
-// NewMemberAsLearner creates a learner Member without an ID and generates one based on the
+// NewMemberAsLearner creates a learner Member without an NodeId and generates one based on the
 // cluster name, peer URLs, and time. This is used for adding new learner member.
 func NewMemberAsLearner(name string, peerURLs types.URLs, clusterName string, now *time.Time) *Member {
 	return newMember(name, peerURLs, clusterName, now, true)
@@ -125,7 +125,7 @@ func (m *Member) IsStarted() bool {
 	return len(m.Name) != 0
 }
 
-// MembersByID implements sort by ID interface
+// MembersByID implements sort by NodeId interface
 type MembersByID []*Member
 
 func (ms MembersByID) Len() int           { return len(ms) }

@@ -217,7 +217,7 @@ func new_Case_SIGQUIT_AND_REMOVE_LEADER_UNTIL_TRIGGER_SNAPSHOT(clus *Cluster) Ca
 func describeMembers(mresp *clientv3.MemberListResponse) (ss []string) {
 	ss = make([]string, len(mresp.Members))
 	for i, m := range mresp.Members {
-		ss[i] = fmt.Sprintf("Name %s / ID %016x / ClientURLs %s / PeerURLs %s",
+		ss[i] = fmt.Sprintf("Name %s / NodeId %016x / ClientURLs %s / PeerURLs %s",
 			m.Name,
 			m.ID,
 			strings.Join(m.ClientURLs, ","),

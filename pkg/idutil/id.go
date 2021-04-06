@@ -29,7 +29,7 @@ const (
 )
 
 // Generator generates unique identifiers based on counters, timestamps, and
-// a node member ID.
+// a node member NodeId.
 //
 // The initial id is in this format:
 // High order 2 bytes are from memberID, next 5 bytes are from timestamp,

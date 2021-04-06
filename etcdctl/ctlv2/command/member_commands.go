@@ -111,7 +111,7 @@ func actionMemberAdd(c *cli.Context) error {
 
 	newID := m.ID
 	newName := args[0]
-	fmt.Printf("Added member named %s with ID %s to cluster\n", newName, newID)
+	fmt.Printf("Added member named %s with NodeId %s to cluster\n", newName, newID)
 
 	members, err := mAPI.List(ctx)
 	if err != nil {
@@ -140,7 +140,7 @@ func actionMemberAdd(c *cli.Context) error {
 func actionMemberRemove(c *cli.Context) error {
 	args := c.Args()
 	if len(args) != 1 {
-		fmt.Fprintln(os.Stderr, "Provide a single member ID")
+		fmt.Fprintln(os.Stderr, "Provide a single member NodeId")
 		os.Exit(1)
 	}
 	removalID := args[0]
@@ -152,7 +152,7 @@ func actionMemberRemove(c *cli.Context) error {
 	// Get the list of members.
 	members, err := mAPI.List(ctx)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error while verifying ID against known members:", err.Error())
+		fmt.Fprintln(os.Stderr, "Error while verifying NodeId against known members:", err.Error())
 		os.Exit(1)
 	}
 	// Sanity check the input.
@@ -163,12 +163,12 @@ func actionMemberRemove(c *cli.Context) error {
 		}
 		if m.Name == removalID {
 			// Note that, so long as it's not ambiguous, we *could* do the right thing by name here.
-			fmt.Fprintf(os.Stderr, "Found a member named %s; if this is correct, please use its ID, eg:\n\tetcdctl member remove %s\n", m.Name, m.ID)
+			fmt.Fprintf(os.Stderr, "Found a member named %s; if this is correct, please use its NodeId, eg:\n\tetcdctl member remove %s\n", m.Name, m.ID)
 			fmt.Fprintf(os.Stderr, "For more details, read the documentation at https://github.com/etcd-io/etcd/blob/master/Documentation/runtime-configuration.md#remove-a-member\n\n")
 		}
 	}
 	if !foundID {
-		fmt.Fprintf(os.Stderr, "Couldn't find a member in the cluster with an ID of %s.\n", removalID)
+		fmt.Fprintf(os.Stderr, "Couldn't find a member in the cluster with an NodeId of %s.\n", removalID)
 		os.Exit(1)
 	}
 
@@ -186,7 +186,7 @@ func actionMemberRemove(c *cli.Context) error {
 func actionMemberUpdate(c *cli.Context) error {
 	args := c.Args()
 	if len(args) != 2 {
-		fmt.Fprintln(os.Stderr, "Provide an ID and a list of comma separated peerURL (0xabcd http://example.com,http://example1.com)")
+		fmt.Fprintln(os.Stderr, "Provide an NodeId and a list of comma separated peerURL (0xabcd http://example.com,http://example1.com)")
 		os.Exit(1)
 	}
 
@@ -202,6 +202,6 @@ func actionMemberUpdate(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Updated member with ID %s in cluster\n", mid)
+	fmt.Printf("Updated member with NodeId %s in cluster\n", mid)
 	return nil
 }

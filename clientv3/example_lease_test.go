@@ -65,7 +65,7 @@ func ExampleLease_revoke() {
 		log.Fatal(err)
 	}
 
-	// revoking lease expires the key attached to its lease ID
+	// revoking lease expires the key attached to its lease NodeId
 	_, err = cli.Revoke(context.TODO(), resp.ID)
 	if err != nil {
 		log.Fatal(err)

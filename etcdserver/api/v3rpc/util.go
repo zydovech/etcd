@@ -115,7 +115,7 @@ func isClientCtxErr(ctxErr error, err error) bool {
 			return true
 		}
 		// "grpc/transport.ClientTransport.CloseStream" on canceled streams
-		// "rpc error: code = Unavailable desc = stream error: stream ID 21; CANCEL")
+		// "rpc error: code = Unavailable desc = stream error: stream NodeId 21; CANCEL")
 		if strings.HasPrefix(msg, "stream error: ") && strings.HasSuffix(msg, "; CANCEL") {
 			return true
 		}

@@ -83,7 +83,7 @@ func keyDecoder(k, v []byte) {
 
 func bytesToLeaseID(bytes []byte) int64 {
 	if len(bytes) != 8 {
-		panic(fmt.Errorf("lease ID must be 8-byte"))
+		panic(fmt.Errorf("lease NodeId must be 8-byte"))
 	}
 	return int64(binary.BigEndian.Uint64(bytes))
 }
@@ -94,7 +94,7 @@ func leaseDecoder(k, v []byte) {
 	if err := lpb.Unmarshal(v); err != nil {
 		panic(err)
 	}
-	fmt.Printf("lease ID=%016x, TTL=%ds\n", leaseID, lpb.TTL)
+	fmt.Printf("lease NodeId=%016x, TTL=%ds\n", leaseID, lpb.TTL)
 }
 
 func authDecoder(k, v []byte) {

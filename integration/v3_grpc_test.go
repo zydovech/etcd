@@ -788,7 +788,7 @@ func TestV3PutIgnoreValue(t *testing.T) {
 			t.Fatalf("#%d: value expected %q, got %q", i, val, rr.Kvs[0].Value)
 		}
 		if rr.Kvs[0].Lease != tt.wleaseID {
-			t.Fatalf("#%d: lease ID expected %d, got %d", i, tt.wleaseID, rr.Kvs[0].Lease)
+			t.Fatalf("#%d: lease NodeId expected %d, got %d", i, tt.wleaseID, rr.Kvs[0].Lease)
 		}
 	}
 }
@@ -928,7 +928,7 @@ func TestV3PutIgnoreLease(t *testing.T) {
 			t.Fatalf("#%d: value expected %q, got %q", i, val, rr.Kvs[0].Value)
 		}
 		if rr.Kvs[0].Lease != tt.wleaseID {
-			t.Fatalf("#%d: lease ID expected %d, got %d", i, tt.wleaseID, rr.Kvs[0].Lease)
+			t.Fatalf("#%d: lease NodeId expected %d, got %d", i, tt.wleaseID, rr.Kvs[0].Lease)
 		}
 	}
 }

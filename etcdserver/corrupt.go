@@ -469,7 +469,7 @@ func (h *hashKVHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("X-Etcd-Cluster-ID", h.server.Cluster().ID().String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.server.Cluster().ID().String())
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(respBytes)
 }

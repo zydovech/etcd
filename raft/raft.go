@@ -31,7 +31,7 @@ import (
 	"go.etcd.io/etcd/raft/tracker"
 )
 
-// None is a placeholder node ID used when there is no leader.
+// None is a placeholder node NodeId used when there is no leader.
 const None uint64 = 0
 const noLimit = math.MaxUint64
 
@@ -114,7 +114,7 @@ func (st StateType) String() string {
 
 // Config contains the parameters to start a raft.
 type Config struct {
-	// ID is the identity of the local raft. ID cannot be 0.
+	// NodeId is the identity of the local raft. NodeId cannot be 0.
 	ID uint64
 
 	// peers contains the IDs of all nodes (including self) in the raft cluster. It
@@ -324,7 +324,10 @@ func newRaft(c *Config) *raft {
 	if err := c.validate(); err != nil {
 		panic(err.Error())
 	}
+	//创建raft log
 	raftlog := newLogWithSize(c.Storage, c.Logger, c.MaxCommittedSizePerReady)
+
+	//获取raft init state
 	hs, cs, err := c.Storage.InitialState()
 	if err != nil {
 		panic(err) // TODO(bdarnell)
@@ -358,6 +361,7 @@ func newRaft(c *Config) *raft {
 		disableProposalForwarding: c.DisableProposalForwarding,
 	}
 
+	//恢复成员信息
 	cfg, prs, err := confchange.Restore(confchange.Changer{
 		Tracker:   r.prs,
 		LastIndex: raftlog.lastIndex(),
@@ -482,8 +486,8 @@ func (r *raft) maybeSendAppend(to uint64, sendIfEmpty bool) bool {
 		r.logger.Debugf("%x paused sending replication messages to %x [%s]", r.id, to, pr)
 	} else {
 		m.Type = pb.MsgApp
-		m.Index = pr.Next - 1
-		m.LogTerm = term
+		m.Index = pr.Next - 1 //preLogIndex
+		m.LogTerm = term      //preLogTerm
 		m.Entries = ents
 		m.Commit = r.raftLog.committed
 		if n := len(m.Entries); n != 0 {
@@ -494,9 +498,9 @@ func (r *raft) maybeSendAppend(to uint64, sendIfEmpty bool) bool {
 				pr.OptimisticUpdate(last)
 				pr.Inflights.Add(last)
 			case tracker.StateProbe:
-				pr.ProbeSent = true
+				pr.ProbeSent = true //进行探测
 			default:
-				r.logger.Panicf("%x is sending append in unhandled state %s", r.id, pr.State)
+				r.logger.Panicf("%x is sending append in unhandled state %s", r.id, pr.State) //快照状态下，不能发送数据
 			}
 		}
 	}
@@ -753,7 +757,7 @@ func (r *raft) becomeLeader() {
 	r.pendingConfIndex = r.raftLog.lastIndex()
 
 	emptyEnt := pb.Entry{Data: nil}
-	if !r.appendEntry(emptyEnt) {
+	if !r.appendEntry(emptyEnt) { //成为leader的时候，会有一个空的log被添加
 		// This won't happen because we just called reset() above.
 		r.logger.Panic("empty entry was dropped")
 	}
@@ -1104,10 +1108,10 @@ func stepLeader(r *raft, m pb.Message) error {
 					r.send(pb.Message{To: m.From, Type: pb.MsgReadIndexResp, Index: ri, Entries: m.Entries})
 				}
 			}
-		} else { // only one voting member (the leader) in the cluster
-			if m.From == None || m.From == r.id { // from leader itself
+		} else { // only one voting member (the leader) in the cluster。。。只有一个voting的成员
+			if m.From == None || m.From == r.id { // from leader itself，只有leader。。
 				r.readStates = append(r.readStates, ReadState{Index: r.raftLog.committed, RequestCtx: m.Entries[0].Data})
-			} else { // from learner member
+			} else { // from learner member。当前的commit发给learner
 				r.send(pb.Message{To: m.From, Type: pb.MsgReadIndexResp, Index: r.raftLog.committed, Entries: m.Entries})
 			}
 		}
@@ -1137,7 +1141,7 @@ func stepLeader(r *raft, m pb.Message) error {
 			}
 		} else {
 			oldPaused := pr.IsPaused()
-			if pr.MaybeUpdate(m.Index) {
+			if pr.MaybeUpdate(m.Index) { //这里的index就是 follower最新的索引
 				switch {
 				case pr.State == tracker.StateProbe:
 					pr.BecomeReplicate()
@@ -1187,14 +1191,14 @@ func stepLeader(r *raft, m pb.Message) error {
 		if pr.State == tracker.StateReplicate && pr.Inflights.Full() {
 			pr.Inflights.FreeFirstOne()
 		}
-		if pr.Match < r.raftLog.lastIndex() {
+		if pr.Match < r.raftLog.lastIndex() {//如果match 小于lastIndex，则发送
 			r.sendAppend(m.From)
 		}
 
-		if r.readOnly.option != ReadOnlySafe || len(m.Context) == 0 {
+		if r.readOnly.option != ReadOnlySafe || len(m.Context) == 0 { //read index是在发起read index之后，发送心跳给别人，来确认自己的位置，心跳里面m.Context不为空
 			return nil
 		}
-
+		//是否收到多数了
 		if r.prs.Voters.VoteResult(r.readOnly.recvAck(m.From, m.Context)) != quorum.VoteWon {
 			return nil
 		}

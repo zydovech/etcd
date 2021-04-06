@@ -202,7 +202,7 @@ func TestMemberAddForLearner(t *testing.T) {
 	}
 
 	if !resp.Member.IsLearner {
-		t.Errorf("Added a member as learner, got resp.Member.IsLearner = %v", resp.Member.IsLearner)
+		t.Errorf("Added a member as learner, got resp.Member.Join = %v", resp.Member.IsLearner)
 	}
 
 	numberOfLearners := 0
@@ -237,7 +237,7 @@ func TestMemberPromote(t *testing.T) {
 	}
 
 	if !memberAddResp.Member.IsLearner {
-		t.Fatalf("Added a member as learner, got resp.Member.IsLearner = %v", memberAddResp.Member.IsLearner)
+		t.Fatalf("Added a member as learner, got resp.Member.Join = %v", memberAddResp.Member.IsLearner)
 	}
 	learnerID := memberAddResp.Member.ID
 
@@ -351,7 +351,7 @@ func TestMemberPromoteMemberNotExist(t *testing.T) {
 		t.Fatalf("number of members = %d, want %d", len(resp.Members), 3)
 	}
 
-	// generate an random ID that does not exist in cluster
+	// generate an random NodeId that does not exist in cluster
 	var randID uint64
 	for {
 		randID = rand.Uint64()

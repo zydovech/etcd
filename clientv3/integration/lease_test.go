@@ -148,7 +148,7 @@ func TestLeaseKeepAlive(t *testing.T) {
 	}
 
 	if kresp.ID != resp.ID {
-		t.Errorf("ID = %x, want %x", kresp.ID, resp.ID)
+		t.Errorf("NodeId = %x, want %x", kresp.ID, resp.ID)
 	}
 
 	lapi.Close()
@@ -208,7 +208,7 @@ func TestLeaseKeepAliveHandleFailure(t *testing.T) {
 
 	kresp := <-rc
 	if kresp.ID != resp.ID {
-		t.Errorf("ID = %x, want %x", kresp.ID, resp.ID)
+		t.Errorf("NodeId = %x, want %x", kresp.ID, resp.ID)
 	}
 
 	// restart the connected member.
@@ -225,7 +225,7 @@ func TestLeaseKeepAliveHandleFailure(t *testing.T) {
 
 	kresp = <-rc
 	if kresp.ID != resp.ID {
-		t.Errorf("ID = %x, want %x", kresp.ID, resp.ID)
+		t.Errorf("NodeId = %x, want %x", kresp.ID, resp.ID)
 	}
 
 	lapi.Close()
@@ -434,7 +434,7 @@ func TestLeaseKeepAliveCloseAfterDisconnectRevoke(t *testing.T) {
 	}
 	kresp := <-rc
 	if kresp.ID != resp.ID {
-		t.Fatalf("ID = %x, want %x", kresp.ID, resp.ID)
+		t.Fatalf("NodeId = %x, want %x", kresp.ID, resp.ID)
 	}
 
 	// keep client disconnected
@@ -512,7 +512,7 @@ func TestLeaseKeepAliveTTLTimeout(t *testing.T) {
 		t.Fatal(kerr)
 	}
 	if kresp := <-rc; kresp.ID != resp.ID {
-		t.Fatalf("ID = %x, want %x", kresp.ID, resp.ID)
+		t.Fatalf("NodeId = %x, want %x", kresp.ID, resp.ID)
 	}
 
 	// keep client disconnected
@@ -615,7 +615,7 @@ func TestLeaseTimeToLiveLeaseNotFound(t *testing.T) {
 		t.Fatalf("expected ResponseHeader not to be nil")
 	}
 	if lresp.ID != resp.ID {
-		t.Fatalf("expected Lease ID %v, but got %v", resp.ID, lresp.ID)
+		t.Fatalf("expected Lease NodeId %v, but got %v", resp.ID, lresp.ID)
 	}
 	if lresp.TTL != -1 {
 		t.Fatalf("expected TTL %v, but got %v", lresp.TTL, lresp.TTL)
@@ -648,7 +648,7 @@ func TestLeaseLeases(t *testing.T) {
 	}
 	for i := range resp.Leases {
 		if ids[i] != resp.Leases[i].ID {
-			t.Fatalf("#%d: lease ID expected %d, got %d", i, ids[i], resp.Leases[i].ID)
+			t.Fatalf("#%d: lease NodeId expected %d, got %d", i, ids[i], resp.Leases[i].ID)
 		}
 	}
 }

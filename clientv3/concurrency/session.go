@@ -76,7 +76,7 @@ func (s *Session) Client() *v3.Client {
 	return s.client
 }
 
-// Lease is the lease ID for keys bound to the session.
+// Lease is the lease NodeId for keys bound to the session.
 func (s *Session) Lease() v3.LeaseID { return s.id }
 
 // Done returns a channel that closes when the lease is orphaned, expires, or

@@ -609,7 +609,7 @@ func (cr *streamReader) dial(t streamType) (io.ReadCloser, error) {
 	req.Header.Set("X-Server-From", cr.tr.ID.String())
 	req.Header.Set("X-Server-Version", version.Version)
 	req.Header.Set("X-Min-Cluster-Version", version.MinClusterVersion)
-	req.Header.Set("X-Etcd-Cluster-ID", cr.tr.ClusterID.String())
+	req.Header.Set("X-Etcd-Cluster-NodeId", cr.tr.ClusterID.String())
 	req.Header.Set("X-Raft-To", cr.peerID.String())
 
 	setPeerURLsHeader(req, cr.tr.URLs)
@@ -680,16 +680,16 @@ func (cr *streamReader) dial(t streamType) (io.ReadCloser, error) {
 		case errClusterIDMismatch.Error():
 			if cr.lg != nil {
 				cr.lg.Warn(
-					"request sent was ignored by remote peer due to cluster ID mismatch",
+					"request sent was ignored by remote peer due to cluster NodeId mismatch",
 					zap.String("remote-peer-id", cr.peerID.String()),
-					zap.String("remote-peer-cluster-id", resp.Header.Get("X-Etcd-Cluster-ID")),
+					zap.String("remote-peer-cluster-id", resp.Header.Get("X-Etcd-Cluster-NodeId")),
 					zap.String("local-member-id", cr.tr.ID.String()),
 					zap.String("local-member-cluster-id", cr.tr.ClusterID.String()),
 					zap.Error(errClusterIDMismatch),
 				)
 			} else {
-				plog.Errorf("request sent was ignored (cluster ID mismatch: peer[%s]=%s, local=%s)",
-					cr.peerID, resp.Header.Get("X-Etcd-Cluster-ID"), cr.tr.ClusterID)
+				plog.Errorf("request sent was ignored (cluster NodeId mismatch: peer[%s]=%s, local=%s)",
+					cr.peerID, resp.Header.Get("X-Etcd-Cluster-NodeId"), cr.tr.ClusterID)
 			}
 			return nil, errClusterIDMismatch
 

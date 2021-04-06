@@ -29,7 +29,7 @@ type LeaderStats struct {
 }
 
 type leaderStats struct {
-	// Leader is the ID of the leader in the etcd cluster.
+	// Leader is the NodeId of the leader in the etcd cluster.
 	// TODO(jonboulle): clarify that these are IDs, not names
 	Leader    string                    `json:"leader"`
 	Followers map[string]*FollowerStats `json:"followers"`

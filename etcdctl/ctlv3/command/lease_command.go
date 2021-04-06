@@ -118,7 +118,7 @@ func NewLeaseTimeToLiveCommand() *cobra.Command {
 // leaseTimeToLiveCommandFunc executes the "lease timetolive" command.
 func leaseTimeToLiveCommandFunc(cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
-		ExitWithError(ExitBadArgs, fmt.Errorf("lease timetolive command needs lease ID as argument"))
+		ExitWithError(ExitBadArgs, fmt.Errorf("lease timetolive command needs lease NodeId as argument"))
 	}
 	var opts []v3.LeaseOption
 	if timeToLiveKeys {
@@ -171,7 +171,7 @@ func NewLeaseKeepAliveCommand() *cobra.Command {
 // leaseKeepAliveCommandFunc executes the "lease keep-alive" command.
 func leaseKeepAliveCommandFunc(cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
-		ExitWithError(ExitBadArgs, fmt.Errorf("lease keep-alive command needs lease ID as argument"))
+		ExitWithError(ExitBadArgs, fmt.Errorf("lease keep-alive command needs lease NodeId as argument"))
 	}
 
 	id := leaseFromArgs(args[0])
@@ -201,7 +201,7 @@ func leaseKeepAliveCommandFunc(cmd *cobra.Command, args []string) {
 func leaseFromArgs(arg string) v3.LeaseID {
 	id, err := strconv.ParseInt(arg, 16, 64)
 	if err != nil {
-		ExitWithError(ExitBadArgs, fmt.Errorf("bad lease ID arg (%v), expecting ID in Hex", err))
+		ExitWithError(ExitBadArgs, fmt.Errorf("bad lease NodeId arg (%v), expecting NodeId in Hex", err))
 	}
 	return v3.LeaseID(id)
 }

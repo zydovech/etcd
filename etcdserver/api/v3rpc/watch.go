@@ -303,9 +303,10 @@ func (sws *serverWatchStream) recvLoop() error {
 				}
 				sws.mu.Unlock()
 			}
+
 			wr := &pb.WatchResponse{
 				Header:   sws.newResponseHeader(wsrev),
-				WatchId:  int64(id),
+				WatchId:  int64(id), //服务端生成一个id进行处理
 				Created:  true,
 				Canceled: err != nil,
 			}
@@ -375,7 +376,7 @@ func (sws *serverWatchStream) sendLoop() {
 
 	for {
 		select {
-		case wresp, ok := <-sws.watchStream.Chan():
+		case wresp, ok := <-sws.watchStream.Chan(): //所有的都往这个里面写
 			if !ok {
 				return
 			}

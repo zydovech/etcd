@@ -95,7 +95,7 @@ func (p *fieldsPrinter) Watch(resp v3.WatchResponse) {
 
 func (p *fieldsPrinter) Grant(r v3.LeaseGrantResponse) {
 	p.hdr(r.ResponseHeader)
-	fmt.Println(`"ID" :`, r.ID)
+	fmt.Println(`"NodeId" :`, r.ID)
 	fmt.Println(`"TTL" :`, r.TTL)
 }
 
@@ -105,13 +105,13 @@ func (p *fieldsPrinter) Revoke(id v3.LeaseID, r v3.LeaseRevokeResponse) {
 
 func (p *fieldsPrinter) KeepAlive(r v3.LeaseKeepAliveResponse) {
 	p.hdr(r.ResponseHeader)
-	fmt.Println(`"ID" :`, r.ID)
+	fmt.Println(`"NodeId" :`, r.ID)
 	fmt.Println(`"TTL" :`, r.TTL)
 }
 
 func (p *fieldsPrinter) TimeToLive(r v3.LeaseTimeToLiveResponse, keys bool) {
 	p.hdr(r.ResponseHeader)
-	fmt.Println(`"ID" :`, r.ID)
+	fmt.Println(`"NodeId" :`, r.ID)
 	fmt.Println(`"TTL" :`, r.TTL)
 	fmt.Println(`"GrantedTTL" :`, r.GrantedTTL)
 	for _, k := range r.Keys {
@@ -122,14 +122,14 @@ func (p *fieldsPrinter) TimeToLive(r v3.LeaseTimeToLiveResponse, keys bool) {
 func (p *fieldsPrinter) Leases(r v3.LeaseLeasesResponse) {
 	p.hdr(r.ResponseHeader)
 	for _, item := range r.Leases {
-		fmt.Println(`"ID" :`, item.ID)
+		fmt.Println(`"NodeId" :`, item.ID)
 	}
 }
 
 func (p *fieldsPrinter) MemberList(r v3.MemberListResponse) {
 	p.hdr(r.Header)
 	for _, m := range r.Members {
-		fmt.Println(`"ID" :`, m.ID)
+		fmt.Println(`"NodeId" :`, m.ID)
 		fmt.Printf("\"Name\" : %q\n", m.Name)
 		for _, u := range m.PeerURLs {
 			fmt.Printf("\"PeerURL\" : %q\n", u)
@@ -137,7 +137,7 @@ func (p *fieldsPrinter) MemberList(r v3.MemberListResponse) {
 		for _, u := range m.ClientURLs {
 			fmt.Printf("\"ClientURL\" : %q\n", u)
 		}
-		fmt.Println(`"IsLearner" :`, m.IsLearner)
+		fmt.Println(`"Join" :`, m.IsLearner)
 		fmt.Println()
 	}
 }
@@ -158,7 +158,7 @@ func (p *fieldsPrinter) EndpointStatus(eps []epStatus) {
 		fmt.Printf("\"Version\" : %q\n", ep.Resp.Version)
 		fmt.Println(`"DBSize" :`, ep.Resp.DbSize)
 		fmt.Println(`"Leader" :`, ep.Resp.Leader)
-		fmt.Println(`"IsLearner" :`, ep.Resp.IsLearner)
+		fmt.Println(`"Join" :`, ep.Resp.IsLearner)
 		fmt.Println(`"RaftIndex" :`, ep.Resp.RaftIndex)
 		fmt.Println(`"RaftTerm" :`, ep.Resp.RaftTerm)
 		fmt.Println(`"RaftAppliedIndex" :`, ep.Resp.RaftAppliedIndex)

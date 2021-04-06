@@ -37,7 +37,7 @@ const (
 )
 
 // TestLessorGrant ensures Lessor can grant wanted lease.
-// The granted lease should have a unique ID with a term
+// The granted lease should have a unique NodeId with a term
 // that is greater than minLeaseTTL.
 func TestLessorGrant(t *testing.T) {
 	lg := zap.NewNop()
@@ -84,7 +84,7 @@ func TestLessorGrant(t *testing.T) {
 	leases := le.Leases()
 	for i := range lss {
 		if lss[i].ID != leases[i].ID {
-			t.Fatalf("lease ID expected %d, got %d", lss[i].ID, leases[i].ID)
+			t.Fatalf("lease NodeId expected %d, got %d", lss[i].ID, leases[i].ID)
 		}
 		if lss[i].ttl != leases[i].ttl {
 			t.Fatalf("ttl expected %d, got %d", lss[i].ttl, leases[i].ttl)

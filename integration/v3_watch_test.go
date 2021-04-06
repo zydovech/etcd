@@ -397,7 +397,7 @@ func TestV3WatchWrongRange(t *testing.T) {
 			t.Fatalf("#%d: canceled %v, want %v", i, tt.canceled, cresp.Canceled)
 		}
 		if tt.canceled && cresp.WatchId != -1 {
-			t.Fatalf("#%d: canceled watch ID %d, want -1", i, cresp.WatchId)
+			t.Fatalf("#%d: canceled watch NodeId %d, want -1", i, cresp.WatchId)
 		}
 	}
 }

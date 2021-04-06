@@ -59,7 +59,7 @@ var (
 	ErrRoleAlreadyExist     = errors.New("auth: role already exists")
 	ErrRoleNotFound         = errors.New("auth: role not found")
 	ErrRoleEmpty            = errors.New("auth: role name is empty")
-	ErrAuthFailed           = errors.New("auth: authentication failed, invalid user ID or password")
+	ErrAuthFailed           = errors.New("auth: authentication failed, invalid user NodeId or password")
 	ErrNoPasswordUser       = errors.New("auth: authentication failed, password was given for no password user")
 	ErrPermissionDenied     = errors.New("auth: permission denied")
 	ErrRoleNotGranted       = errors.New("auth: role is not granted to the user")

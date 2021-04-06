@@ -21,7 +21,7 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 type RequestHeader struct {
-	ID uint64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	ID uint64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	// username is a username that is associated with an auth token of gRPC connection
 	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	// auth_revision is a revision number of auth.authStore. It is not related to mvcc
@@ -37,7 +37,7 @@ func (*RequestHeader) Descriptor() ([]byte, []int) { return fileDescriptorRaftIn
 // sent via raft.
 type InternalRaftRequest struct {
 	Header                   *RequestHeader                   `protobuf:"bytes,100,opt,name=header" json:"header,omitempty"`
-	ID                       uint64                           `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	ID                       uint64                           `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	V2                       *Request                         `protobuf:"bytes,2,opt,name=v2" json:"v2,omitempty"`
 	Range                    *RangeRequest                    `protobuf:"bytes,3,opt,name=range" json:"range,omitempty"`
 	Put                      *PutRequest                      `protobuf:"bytes,4,opt,name=put" json:"put,omitempty"`
@@ -727,7 +727,7 @@ func (m *RequestHeader) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
@@ -844,7 +844,7 @@ func (m *InternalRaftRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {

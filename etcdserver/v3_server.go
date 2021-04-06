@@ -56,7 +56,7 @@ type Lessor interface {
 	// LeaseRevoke sends LeaseRevoke request to raft and apply it after committed.
 	LeaseRevoke(ctx context.Context, r *pb.LeaseRevokeRequest) (*pb.LeaseRevokeResponse, error)
 
-	// LeaseRenew renews the lease with given ID. The renewed TTL is returned. Or an error
+	// LeaseRenew renews the lease with given NodeId. The renewed TTL is returned. Or an error
 	// is returned.
 	LeaseRenew(ctx context.Context, id lease.LeaseID) (int64, error)
 
@@ -245,7 +245,7 @@ func (s *EtcdServer) Compact(ctx context.Context, r *pb.CompactionRequest) (*pb.
 }
 
 func (s *EtcdServer) LeaseGrant(ctx context.Context, r *pb.LeaseGrantRequest) (*pb.LeaseGrantResponse, error) {
-	// no id given? choose one
+	// no id given? choose one 客户端可以指定id,一般不指定，由服务端分配
 	for r.ID == int64(lease.NoLease) {
 		// only use positive int64 id's
 		r.ID = int64(s.reqIDGen.Next() & ((1 << 63) - 1))
@@ -732,7 +732,7 @@ func (s *EtcdServer) linearizableReadLoop() {
 							zap.Uint64("received-request-id", id2),
 						)
 					} else {
-						plog.Warningf("ignored out-of-date read index response; local node read indexes queueing up and waiting to be in sync with leader (request ID want %d, got %d)", id1, id2)
+						plog.Warningf("ignored out-of-date read index response; local node read indexes queueing up and waiting to be in sync with leader (request NodeId want %d, got %d)", id1, id2)
 					}
 					slowReadIndex.Inc()
 				}

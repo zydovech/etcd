@@ -37,9 +37,9 @@ func TestMemberTime(t *testing.T) {
 		id  types.ID
 	}{
 		{NewMember("mem1", []url.URL{{Scheme: "http", Host: "10.0.0.8:2379"}}, "", nil), 14544069596553697298},
-		// Same ID, different name (names shouldn't matter)
+		// Same NodeId, different name (names shouldn't matter)
 		{NewMember("memfoo", []url.URL{{Scheme: "http", Host: "10.0.0.8:2379"}}, "", nil), 14544069596553697298},
-		// Same ID, different Time
+		// Same NodeId, different Time
 		{NewMember("mem1", []url.URL{{Scheme: "http", Host: "10.0.0.8:2379"}}, "", timeParse("1984-12-23T15:04:05Z")), 2448790162483548276},
 		// Different cluster name
 		{NewMember("mcm1", []url.URL{{Scheme: "http", Host: "10.0.0.8:2379"}}, "etcd", timeParse("1984-12-23T15:04:05Z")), 6973882743191604649},
@@ -50,7 +50,7 @@ func TestMemberTime(t *testing.T) {
 	}
 	for i, tt := range tests {
 		if tt.mem.ID != tt.id {
-			t.Errorf("#%d: mem.ID = %v, want %v", i, tt.mem.ID, tt.id)
+			t.Errorf("#%d: mem.NodeId = %v, want %v", i, tt.mem.ID, tt.id)
 		}
 	}
 }
@@ -81,7 +81,7 @@ func TestMemberPick(t *testing.T) {
 		for j := 0; j < 1000; j++ {
 			a := tt.memb.PickPeerURL()
 			if !tt.urls[a] {
-				t.Errorf("#%d: returned ID %q not in expected range!", i, a)
+				t.Errorf("#%d: returned NodeId %q not in expected range!", i, a)
 				break
 			}
 		}

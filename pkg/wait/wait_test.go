@@ -87,16 +87,16 @@ func TestIsRegistered(t *testing.T) {
 
 	for i := uint64(0); i < 3; i++ {
 		if !wt.IsRegistered(i) {
-			t.Errorf("event ID %d isn't registered", i)
+			t.Errorf("event NodeId %d isn't registered", i)
 		}
 	}
 
 	if wt.IsRegistered(4) {
-		t.Errorf("event ID 4 shouldn't be registered")
+		t.Errorf("event NodeId 4 shouldn't be registered")
 	}
 
 	wt.Trigger(0, "foo")
 	if wt.IsRegistered(0) {
-		t.Errorf("event ID 0 is already triggered, shouldn't be registered")
+		t.Errorf("event NodeId 0 is already triggered, shouldn't be registered")
 	}
 }

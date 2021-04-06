@@ -91,7 +91,7 @@ func TestServeRaftPrefix(t *testing.T) {
 			http.StatusBadRequest,
 		},
 		{
-			// good request, wrong cluster ID
+			// good request, wrong cluster NodeId
 			"POST",
 			bytes.NewReader(
 				pbutil.MustMarshal(&raftpb.Message{}),
@@ -150,7 +150,7 @@ func TestServeRaftPrefix(t *testing.T) {
 		if err != nil {
 			t.Fatalf("#%d: could not create request: %#v", i, err)
 		}
-		req.Header.Set("X-Etcd-Cluster-ID", tt.clusterID)
+		req.Header.Set("X-Etcd-Cluster-NodeId", tt.clusterID)
 		req.Header.Set("X-Server-Version", version.Version)
 		rw := httptest.NewRecorder()
 		h := newPipelineHandler(&Transport{Logger: zap.NewExample()}, tt.p, types.ID(0))
@@ -191,7 +191,7 @@ func TestServeRaftStreamPrefix(t *testing.T) {
 		if err != nil {
 			t.Fatalf("#%d: could not create request: %#v", i, err)
 		}
-		req.Header.Set("X-Etcd-Cluster-ID", "1")
+		req.Header.Set("X-Etcd-Cluster-NodeId", "1")
 		req.Header.Set("X-Server-Version", version.Version)
 		req.Header.Set("X-Raft-To", "2")
 
@@ -285,7 +285,7 @@ func TestServeRaftStreamPrefixBad(t *testing.T) {
 			"1",
 			http.StatusGone,
 		},
-		// wrong cluster ID
+		// wrong cluster NodeId
 		{
 			"GET",
 			RaftStreamPrefix + "/message/1",
@@ -307,7 +307,7 @@ func TestServeRaftStreamPrefixBad(t *testing.T) {
 		if err != nil {
 			t.Fatalf("#%d: could not create request: %#v", i, err)
 		}
-		req.Header.Set("X-Etcd-Cluster-ID", tt.clusterID)
+		req.Header.Set("X-Etcd-Cluster-NodeId", tt.clusterID)
 		req.Header.Set("X-Server-Version", version.Version)
 		req.Header.Set("X-Raft-To", tt.remote)
 		rw := httptest.NewRecorder()

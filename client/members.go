@@ -32,7 +32,7 @@ var (
 )
 
 type Member struct {
-	// ID is the unique identifier of this Member.
+	// NodeId is the unique identifier of this Member.
 	ID string `json:"id"`
 
 	// Name is a human-readable, non-unique identifier of this Member.

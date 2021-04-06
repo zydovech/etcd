@@ -62,7 +62,7 @@ func (h *httpKVAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		nodeId, err := strconv.ParseUint(key[1:], 0, 64)
 		if err != nil {
-			log.Printf("Failed to convert ID for conf change (%v)\n", err)
+			log.Printf("Failed to convert NodeId for conf change (%v)\n", err)
 			http.Error(w, "Failed on POST", http.StatusBadRequest)
 			return
 		}
@@ -79,7 +79,7 @@ func (h *httpKVAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.Method == "DELETE":
 		nodeId, err := strconv.ParseUint(key[1:], 0, 64)
 		if err != nil {
-			log.Printf("Failed to convert ID for conf change (%v)\n", err)
+			log.Printf("Failed to convert NodeId for conf change (%v)\n", err)
 			http.Error(w, "Failed on DELETE", http.StatusBadRequest)
 			return
 		}

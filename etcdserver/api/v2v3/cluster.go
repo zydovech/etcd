@@ -22,7 +22,7 @@ import (
 )
 
 func (s *v2v3Server) ID() types.ID {
-	// TODO: use an actual member ID
+	// TODO: use an actual member NodeId
 	return types.ID(0xe7cd2f00d)
 }
 func (s *v2v3Server) ClientURLs() []string                  { panic("STUB") }

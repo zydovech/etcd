@@ -215,7 +215,7 @@ func TestV3LeaseKeepAlive(t *testing.T) {
 				return rxerr
 			}
 			if lresp.ID != leaseID {
-				return fmt.Errorf("expected lease ID %v, got %v", leaseID, lresp.ID)
+				return fmt.Errorf("expected lease NodeId %v, got %v", leaseID, lresp.ID)
 			}
 			time.Sleep(time.Duration(lresp.TTL/2) * time.Second)
 		}
@@ -334,7 +334,7 @@ func TestV3LeaseLeases(t *testing.T) {
 	}
 	for i := range lresp.Leases {
 		if lresp.Leases[i].ID != ids[i] {
-			t.Fatalf("#%d: lease ID expected %d, got %d", i, ids[i], lresp.Leases[i].ID)
+			t.Fatalf("#%d: lease NodeId expected %d, got %d", i, ids[i], lresp.Leases[i].ID)
 		}
 	}
 }

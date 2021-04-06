@@ -40,7 +40,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Lease struct {
-	ID           int64 `protobuf:"varint,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	ID           int64 `protobuf:"varint,1,opt,name=NodeId,proto3" json:"NodeId,omitempty"`
 	TTL          int64 `protobuf:"varint,2,opt,name=TTL,proto3" json:"TTL,omitempty"`
 	RemainingTTL int64 `protobuf:"varint,3,opt,name=RemainingTTL,proto3" json:"RemainingTTL,omitempty"`
 }
@@ -250,7 +250,7 @@ func (m *Lease) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeId", wireType)
 			}
 			m.ID = 0
 			for shift := uint(0); ; shift += 7 {

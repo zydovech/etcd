@@ -16,10 +16,8 @@ package cmd
 
 import (
 	"context"
-	"encoding/binary"
 	"fmt"
 	"math"
-	"math/rand"
 	"os"
 	"strings"
 	"time"
@@ -83,7 +81,7 @@ func putFunc(cmd *cobra.Command, args []string) {
 	}
 	limit := rate.NewLimiter(rate.Limit(putRate), 1)
 	clients := mustCreateClients(totalClients, totalConns)
-	k, v := make([]byte, keySize), string(mustRandBytes(valSize))
+//	k, v := make([]byte, keySize), string(mustRandBytes(valSize))
 
 	bar = pb.New(putTotal)
 	bar.Format("Bom !")
@@ -107,12 +105,12 @@ func putFunc(cmd *cobra.Command, args []string) {
 
 	go func() {
 		for i := 0; i < putTotal; i++ {
-			if seqKeys {
-				binary.PutVarint(k, int64(i%keySpaceSize))
-			} else {
-				binary.PutVarint(k, int64(rand.Intn(keySpaceSize)))
-			}
-			requests <- v3.OpPut(string(k), v)
+			//if seqKeys {
+			//	binary.PutVarint(k, int64(i%keySpaceSize))
+			//} else {
+			//	binary.PutVarint(k, int64(rand.Intn(keySpaceSize)))
+			//}
+			requests <- v3.OpPut("/1234567890", "21212121212121212121212121212")
 		}
 		close(requests)
 	}()

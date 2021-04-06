@@ -31,7 +31,7 @@ func ExampleCluster_memberList() {
 		log.Fatal(err)
 	}
 	defer cli.Close()
-
+	cli.Watch()
 	resp, err := cli.MemberList(context.Background())
 	if err != nil {
 		log.Fatal(err)
@@ -75,9 +75,9 @@ func ExampleCluster_memberAddAsLearner() {
 		log.Fatal(err)
 	}
 	fmt.Println("added member.PeerURLs:", mresp.Member.PeerURLs)
-	fmt.Println("added member.IsLearner:", mresp.Member.IsLearner)
+	fmt.Println("added member.Join:", mresp.Member.IsLearner)
 	// added member.PeerURLs: [http://localhost:32380]
-	// added member.IsLearner: true
+	// added member.Join: true
 }
 
 func ExampleCluster_memberRemove() {

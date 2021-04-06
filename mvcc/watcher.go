@@ -22,14 +22,14 @@ import (
 	"go.etcd.io/etcd/mvcc/mvccpb"
 )
 
-// AutoWatchID is the watcher ID passed in WatchStream.Watch when no
-// user-provided ID is available. If pass, an ID will automatically be assigned.
+// AutoWatchID is the watcher NodeId passed in WatchStream.Watch when no
+// user-provided NodeId is available. If pass, an NodeId will automatically be assigned.
 const AutoWatchID WatchID = 0
 
 var (
 	ErrWatcherNotExist    = errors.New("mvcc: watcher does not exist")
 	ErrEmptyWatcherRange  = errors.New("mvcc: watcher range is empty")
-	ErrWatcherDuplicateID = errors.New("mvcc: duplicate watch ID provided on the WatchStream")
+	ErrWatcherDuplicateID = errors.New("mvcc: duplicate watch NodeId provided on the WatchStream")
 )
 
 type WatchID int64
@@ -44,16 +44,16 @@ type WatchStream interface {
 	// The whole event history can be watched unless compacted.
 	// If "startRev" <=0, watch observes events after currentRev.
 	//
-	// The returned "id" is the ID of this watcher. It appears as WatchID
+	// The returned "id" is the NodeId of this watcher. It appears as WatchID
 	// in events that are sent to the created watcher through stream channel.
-	// The watch ID is used when it's not equal to AutoWatchID. Otherwise,
-	// an auto-generated watch ID is returned.
+	// The watch NodeId is used when it's not equal to AutoWatchID. Otherwise,
+	// an auto-generated watch NodeId is returned.
 	Watch(id WatchID, key, end []byte, startRev int64, fcs ...FilterFunc) (WatchID, error)
 
 	// Chan returns a chan. All watch response will be sent to the returned chan.
 	Chan() <-chan WatchResponse
 
-	// RequestProgress requests the progress of the watcher with given ID. The response
+	// RequestProgress requests the progress of the watcher with given NodeId. The response
 	// will only be sent if the watcher is currently synced.
 	// The responses will be sent through the WatchRespone Chan attached
 	// with this stream to ensure correct ordering.
@@ -61,7 +61,7 @@ type WatchStream interface {
 	// of the watchers since the watcher is currently synced.
 	RequestProgress(id WatchID)
 
-	// Cancel cancels a watcher by giving its ID. If watcher does not exist, an error will be
+	// Cancel cancels a watcher by giving its NodeId. If watcher does not exist, an error will be
 	// returned.
 	Cancel(id WatchID) error
 
@@ -97,7 +97,7 @@ type watchStream struct {
 	ch        chan WatchResponse
 
 	mu sync.Mutex // guards fields below it
-	// nextID is the ID pre-allocated for next new watcher in this stream
+	// nextID is the NodeId pre-allocated for next new watcher in this stream
 	nextID   WatchID
 	closed   bool
 	cancels  map[WatchID]cancelFunc

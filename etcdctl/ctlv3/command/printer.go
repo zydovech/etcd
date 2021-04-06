@@ -159,7 +159,7 @@ func (p *printerUnsupported) DBStatus(snapshot.Status)  { p.p(nil) }
 func (p *printerUnsupported) MoveLeader(leader, target uint64, r v3.MoveLeaderResponse) { p.p(nil) }
 
 func makeMemberListTable(r v3.MemberListResponse) (hdr []string, rows [][]string) {
-	hdr = []string{"ID", "Status", "Name", "Peer Addrs", "Client Addrs", "Is Learner"}
+	hdr = []string{"NodeId", "Status", "Name", "Peer Addrs", "Client Addrs", "Is Learner"}
 	for _, m := range r.Members {
 		status := "started"
 		if len(m.Name) == 0 {
@@ -195,7 +195,7 @@ func makeEndpointHealthTable(healthList []epHealth) (hdr []string, rows [][]stri
 }
 
 func makeEndpointStatusTable(statusList []epStatus) (hdr []string, rows [][]string) {
-	hdr = []string{"endpoint", "ID", "version", "db size", "is leader", "is learner", "raft term",
+	hdr = []string{"endpoint", "NodeId", "version", "db size", "is leader", "is learner", "raft term",
 		"raft index", "raft applied index", "errors"}
 	for _, status := range statusList {
 		rows = append(rows, []string{

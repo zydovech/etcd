@@ -333,7 +333,7 @@ func TestCreateSelf(t *testing.T) {
 		{errc, errc.err},
 		// watcher.next returns an error
 		{errwc, errw.err},
-		// parse key exist error to duplicate ID error
+		// parse key exist error to duplicate NodeId error
 		{errdupc, ErrDuplicateID},
 	}
 

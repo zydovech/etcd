@@ -511,8 +511,8 @@ func (c *cluster) name(i int) string {
 	return fmt.Sprint(i)
 }
 
-// isMembersEqual checks whether two members equal except ID field.
-// The given wmembs should always set ID field to empty string.
+// isMembersEqual checks whether two members equal except NodeId field.
+// The given wmembs should always set NodeId field to empty string.
 func isMembersEqual(membs []client.Member, wmembs []client.Member) bool {
 	sort.Sort(SortableMemberSliceByPeerURLs(membs))
 	sort.Sort(SortableMemberSliceByPeerURLs(wmembs))
@@ -1058,7 +1058,7 @@ func (m *member) Stop(t testing.TB) {
 	)
 }
 
-// checkLeaderTransition waits for leader transition, returning the new leader ID.
+// checkLeaderTransition waits for leader transition, returning the new leader NodeId.
 func checkLeaderTransition(m *member, oldLead uint64) uint64 {
 	interval := time.Duration(m.s.Cfg.TickMs) * time.Millisecond
 	for m.s.Lead() == 0 || (m.s.Lead() == oldLead) {
@@ -1353,7 +1353,7 @@ func (c *ClusterV3) getMembers() []*pb.Member {
 
 // waitMembersMatch waits until v3rpc MemberList returns the 'same' members info as the
 // local 'c.Members', which is the local recording of members in the testing cluster. With
-// the exception that the local recording c.Members does not have info on Member.ID, which
+// the exception that the local recording c.Members does not have info on Member.NodeId, which
 // is generated when the member is been added to cluster.
 //
 // Note:

@@ -148,18 +148,18 @@ func (s *EtcdServer) ClientCertAuthEnabled() bool { return s.Cfg.ClientCertAuthE
 
 type Server interface {
 	// AddMember attempts to add a member into the cluster. It will return
-	// ErrIDRemoved if member ID is removed from the cluster, or return
-	// ErrIDExists if member ID exists in the cluster.
+	// ErrIDRemoved if member NodeId is removed from the cluster, or return
+	// ErrIDExists if member NodeId exists in the cluster.
 	AddMember(ctx context.Context, memb membership.Member) ([]*membership.Member, error)
 	// RemoveMember attempts to remove a member from the cluster. It will
-	// return ErrIDRemoved if member ID is removed from the cluster, or return
-	// ErrIDNotFound if member ID is not in the cluster.
+	// return ErrIDRemoved if member NodeId is removed from the cluster, or return
+	// ErrIDNotFound if member NodeId is not in the cluster.
 	RemoveMember(ctx context.Context, id uint64) ([]*membership.Member, error)
 	// UpdateMember attempts to update an existing member in the cluster. It will
-	// return ErrIDNotFound if the member ID does not exist.
+	// return ErrIDNotFound if the member NodeId does not exist.
 	UpdateMember(ctx context.Context, updateMemb membership.Member) ([]*membership.Member, error)
 	// PromoteMember attempts to promote a non-voting node to a voting node. It will
-	// return ErrIDNotFound if the member ID does not exist.
+	// return ErrIDNotFound if the member NodeId does not exist.
 	// return ErrLearnerNotReady if the member are not ready.
 	// return ErrMemberNotLearner if the member is not a learner.
 	PromoteMember(ctx context.Context, id uint64) ([]*membership.Member, error)
@@ -1724,7 +1724,7 @@ func (s *EtcdServer) promoteMember(ctx context.Context, id uint64) ([]*membershi
 		return nil, err
 	}
 
-	// build the context for the promote confChange. mark IsLearner to false and IsPromote to true.
+	// build the context for the promote confChange. mark Join to false and IsPromote to true.
 	promoteChangeContext := membership.ConfigChangeContext{
 		Member: membership.Member{
 			ID: types.ID(id),
@@ -2279,12 +2279,12 @@ func (s *EtcdServer) applyConfChange(cc raftpb.ConfChange, confState *raftpb.Con
 		if cc.NodeID != uint64(confChangeContext.Member.ID) {
 			if lg != nil {
 				lg.Panic(
-					"got different member ID",
+					"got different member NodeId",
 					zap.String("member-id-from-config-change-entry", types.ID(cc.NodeID).String()),
 					zap.String("member-id-from-message", confChangeContext.Member.ID.String()),
 				)
 			} else {
-				plog.Panicf("nodeID should always be equal to member ID")
+				plog.Panicf("nodeID should always be equal to member NodeId")
 			}
 		}
 		if confChangeContext.IsPromote {
@@ -2326,12 +2326,12 @@ func (s *EtcdServer) applyConfChange(cc raftpb.ConfChange, confState *raftpb.Con
 		if cc.NodeID != uint64(m.ID) {
 			if lg != nil {
 				lg.Panic(
-					"got different member ID",
+					"got different member NodeId",
 					zap.String("member-id-from-config-change-entry", types.ID(cc.NodeID).String()),
 					zap.String("member-id-from-message", m.ID.String()),
 				)
 			} else {
-				plog.Panicf("nodeID should always be equal to member ID")
+				plog.Panicf("nodeID should always be equal to member NodeId")
 			}
 		}
 		s.cluster.UpdateRaftAttributes(m.ID, m.RaftAttributes)
@@ -2668,7 +2668,7 @@ func (s *EtcdServer) Logger() *zap.Logger {
 	return s.lg
 }
 
-// IsLearner returns if the local member is raft learner
+// Join returns if the local member is raft learner
 func (s *EtcdServer) IsLearner() bool {
 	return s.cluster.IsLocalMemberLearner()
 }

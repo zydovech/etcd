@@ -51,7 +51,7 @@ var (
 	RaftSnapshotPrefix = path.Join(RaftPrefix, "snapshot")
 
 	errIncompatibleVersion = errors.New("incompatible version")
-	errClusterIDMismatch   = errors.New("cluster ID mismatch")
+	errClusterIDMismatch   = errors.New("cluster NodeId mismatch")
 )
 
 type peerGetter interface {
@@ -92,7 +92,7 @@ func (h *pipelineHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("X-Etcd-Cluster-ID", h.cid.String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.cid.String())
 
 	if err := checkClusterCompatibilityFromHeader(h.lg, h.localID, r.Header, h.cid); err != nil {
 		http.Error(w, err.Error(), http.StatusPreconditionFailed)
@@ -207,7 +207,7 @@ func (h *snapshotHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("X-Etcd-Cluster-ID", h.cid.String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.cid.String())
 
 	if err := checkClusterCompatibilityFromHeader(h.lg, h.localID, r.Header, h.cid); err != nil {
 		http.Error(w, err.Error(), http.StatusPreconditionFailed)
@@ -375,7 +375,7 @@ func (h *streamHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("X-Server-Version", version.Version)
-	w.Header().Set("X-Etcd-Cluster-ID", h.cid.String())
+	w.Header().Set("X-Etcd-Cluster-NodeId", h.cid.String())
 
 	if err := checkClusterCompatibilityFromHeader(h.lg, h.tr.ID, r.Header, h.cid); err != nil {
 		http.Error(w, err.Error(), http.StatusPreconditionFailed)
@@ -408,14 +408,14 @@ func (h *streamHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if h.lg != nil {
 			h.lg.Warn(
-				"failed to parse path into ID",
+				"failed to parse path into NodeId",
 				zap.String("local-member-id", h.tr.ID.String()),
 				zap.String("remote-peer-id-stream-handler", h.id.String()),
 				zap.String("path", fromStr),
 				zap.Error(err),
 			)
 		} else {
-			plog.Errorf("failed to parse from %s into ID (%v)", fromStr, err)
+			plog.Errorf("failed to parse from %s into NodeId (%v)", fromStr, err)
 		}
 		http.Error(w, "invalid from", http.StatusNotFound)
 		return
@@ -438,7 +438,7 @@ func (h *streamHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if p == nil {
 		// This may happen in following cases:
 		// 1. user starts a remote peer that belongs to a different cluster
-		// with the same cluster ID.
+		// with the same cluster NodeId.
 		// 2. local etcd falls behind of the cluster, and cannot recognize
 		// the members that joined after its current progress.
 		if urls := r.Header.Get("X-PeerURLs"); urls != "" {
@@ -463,7 +463,7 @@ func (h *streamHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if gto := r.Header.Get("X-Raft-To"); gto != wto {
 		if h.lg != nil {
 			h.lg.Warn(
-				"ignored streaming request; ID mismatch",
+				"ignored streaming request; NodeId mismatch",
 				zap.String("local-member-id", h.tr.ID.String()),
 				zap.String("remote-peer-id-stream-handler", h.id.String()),
 				zap.String("remote-peer-id-header", gto),
@@ -471,7 +471,7 @@ func (h *streamHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				zap.String("cluster-id", h.cid.String()),
 			)
 		} else {
-			plog.Errorf("streaming request ignored (ID mismatch got %s want %s)", gto, wto)
+			plog.Errorf("streaming request ignored (NodeId mismatch got %s want %s)", gto, wto)
 		}
 		http.Error(w, "to field mismatch", http.StatusPreconditionFailed)
 		return
@@ -496,7 +496,7 @@ func (h *streamHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // checkClusterCompatibilityFromHeader checks the cluster compatibility of
 // the local member from the given header.
 // It checks whether the version of local member is compatible with
-// the versions in the header, and whether the cluster ID of local member
+// the versions in the header, and whether the cluster NodeId of local member
 // matches the one in the header.
 func checkClusterCompatibilityFromHeader(lg *zap.Logger, localID types.ID, header http.Header, cid types.ID) error {
 	remoteName := header.Get("X-Server-From")
@@ -542,10 +542,10 @@ func checkClusterCompatibilityFromHeader(lg *zap.Logger, localID types.ID, heade
 		}
 		return errIncompatibleVersion
 	}
-	if gcid := header.Get("X-Etcd-Cluster-ID"); gcid != cid.String() {
+	if gcid := header.Get("X-Etcd-Cluster-NodeId"); gcid != cid.String() {
 		if lg != nil {
 			lg.Warn(
-				"request cluster ID mismatch",
+				"request cluster NodeId mismatch",
 				zap.String("local-member-id", localID.String()),
 				zap.String("local-member-cluster-id", cid.String()),
 				zap.String("local-member-server-version", localVs),
@@ -556,7 +556,7 @@ func checkClusterCompatibilityFromHeader(lg *zap.Logger, localID types.ID, heade
 				zap.String("remote-peer-cluster-id", gcid),
 			)
 		} else {
-			plog.Errorf("request cluster ID mismatch (got %s want %s)", gcid, cid)
+			plog.Errorf("request cluster NodeId mismatch (got %s want %s)", gcid, cid)
 		}
 		return errClusterIDMismatch
 	}
